@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation';
+import Hero from '../components/Hero';
+import SignatureHighlights from '../components/SignatureHighlights';
+import TourShowcase from '../components/TourShowcase';
+import Testimonials from '../components/Testimonials';
+import Concierge from '../components/Concierge';
+import Footer from '../components/Footer';
+
+const meta = {
+  title: 'Just Lisbon — Luxe privétours in Lissabon & Sintra',
+  description: 'Curated high-end privétours en experiences voor Nederlandse reizigers in Lissabon, Sintra en Cascais.'
+};
+---
+<BaseLayout title={meta.title} description={meta.description}>
+  <Navigation />
+  <Hero />
+  <SignatureHighlights />
+  <TourShowcase />
+  <Testimonials />
+  <Concierge />
+  <Footer />
+</BaseLayout>

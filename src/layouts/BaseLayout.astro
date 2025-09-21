@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Just Lisbon — Luxe privétours in Lissabon & Sintra',
+  description = 'Just Lisbon creëert high-end tours en experiences in Lissabon en Sintra voor veeleisende Nederlandse reizigers.'
+} = Astro.props as Props;
+---
+<html lang="nl" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="relative overflow-x-hidden">
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-slate/40" />
+    <main class="relative">
+      <slot />
+    </main>
+  </body>
+</html>
