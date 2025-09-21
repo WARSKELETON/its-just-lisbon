@@ -13,9 +13,6 @@ const Hero: FC = () => {
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.05fr_minmax(0,0.95fr)] lg:items-center">
           <div className="space-y-10">
-            <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-slate/30 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-accent">
-              Just Lisbon • Private Travel
-            </span>
             <h1 className="font-display text-4xl leading-tight text-bone md:text-6xl md:leading-[1.05]">
               Op maat gemaakte luxe tours in Lissabon &amp; Sintra voor de veeleisende reiziger.
             </h1>
@@ -67,9 +64,6 @@ const Hero: FC = () => {
             <div className="relative rounded-[28px] border border-bone/10 bg-slate/40 p-8 shadow-glow">
               <header className="flex items-center justify-between">
                 <p className="text-xs uppercase tracking-[0.3em] text-bone/60">Private signature</p>
-                <span className="rounded-full border border-accent/40 px-3 py-1 text-xs text-accent">
-                  {featuredTour.toBook ? 'Direct te boeken' : 'Op aanvraag'}
-                </span>
               </header>
               <h2 className="mt-6 font-display text-2xl text-bone">{featuredTour.name}</h2>
               <ul className="mt-8 space-y-4 text-sm text-bone/60">

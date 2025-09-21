@@ -53,9 +53,6 @@ const TourShowcase: FC = () => {
                 <header className="space-y-4">
                   <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.28em] text-bone/50">
                     <span className="rounded-full border border-bone/20 px-4 py-1">
-                      {tour.toBook ? 'Direct te boeken' : 'Op aanvraag'}
-                    </span>
-                    <span className="rounded-full border border-bone/20 px-4 py-1">
                       {tour.included.length} inclusies
                     </span>
                   </div>
@@ -70,7 +67,13 @@ const TourShowcase: FC = () => {
                 </ul>
                 <div className="mt-auto flex flex-col gap-4 border-t border-bone/10 pt-6 text-sm">
                   <span className="font-semibold text-bone whitespace-pre-line">{tour.price}</span>
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em]">
+                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.3em]">
+                    <a
+                      href={`/tours/${tour.bookName}`}
+                      className="text-bone/60 transition hover:text-champagne"
+                    >
+                      Bekijk details
+                    </a>
                     <a href="#contact" className="text-accent transition hover:text-champagne">
                       {tour.toBook ? 'Reserveer nu' : 'Informeer naar opties'}
                     </a>

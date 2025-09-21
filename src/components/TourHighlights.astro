@@ -1,0 +1,29 @@
+---
+import type { Tour } from "../data/tours";
+
+interface Props {
+  landmarks: Tour["landmarks"];
+  className?: string;
+}
+
+const { landmarks, className = "" } = Astro.props as Props;
+const containerClass = ["space-y-4", className].filter(Boolean).join(" ");
+---
+
+<section class={containerClass}>
+  <header class="space-y-2">
+    <p class="text-xs uppercase tracking-[0.35em] text-bone/40">Hoogtepunten</p>
+    <h2 class="font-display text-2xl text-bone md:text-3xl">
+      Belangrijkste stops onderweg
+    </h2>
+  </header>
+  <ul class="flex flex-wrap gap-3">
+    {
+      landmarks.map((landmark) => (
+        <li class="rounded-full border border-accent/30 bg-slate/40 px-5 py-2 text-sm text-bone/80 backdrop-blur transition hover:border-accent/60 hover:text-champagne">
+          {landmark}
+        </li>
+      ))
+    }
+  </ul>
+</section>

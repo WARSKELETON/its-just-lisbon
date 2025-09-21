@@ -1,0 +1,182 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navigation from "../../components/Navigation";
+import Concierge from "../../components/Concierge";
+import Footer from "../../components/Footer";
+import TourTimeline from "../../components/TourTimeline.astro";
+import TourHighlights from "../../components/TourHighlights.astro";
+import tours from "../../data/tours";
+
+export function getStaticPaths() {
+  return tours.map((tour) => ({
+    params: { bookName: tour.bookName },
+  }));
+}
+
+const { bookName } = Astro.params;
+const tour = tours.find((item) => item.bookName === bookName);
+
+if (!tour) {
+  throw new Response("Tour niet gevonden", { status: 404 });
+}
+
+const meta = {
+  title: `${tour.name} — Just Lisbon`,
+  description: tour.description,
+};
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <Navigation />
+  <article class="relative md:pt-10">
+    <section class="relative isolate overflow-hidden border-b border-bone/10">
+      <div class="absolute inset-0">
+        <img
+          src={"https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"}
+          alt={tour.name}
+          class="hidden h-full w-full object-cover object-center md:block"
+          loading="lazy"
+        />
+        <img
+          src={"https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"}
+          alt={tour.name}
+          class="h-full w-full object-cover object-center md:hidden"
+          loading="lazy"
+        />
+      </div>
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-midnight/95"
+      >
+      </div>
+      <div class="relative mx-auto max-w-5xl px-6 py-24 lg:px-8">
+        <div
+          class="flex flex-col gap-6 rounded-3xl border border-white/10 p-8 shadow-2xl shadow-black/40 backdrop-blur-sm lg:p-12"
+        >
+          <div class="inline-flex w-fit items-center gap-3">
+            <span
+              class="rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone/80"
+            >
+              {tour.location === "lisbon" ? "Lissabon" : "Sintra"}
+            </span>
+          </div>
+          <div class="space-y-6">
+            <h1 class="font-display text-4xl text-bone md:text-6xl">
+              {tour.name}
+            </h1>
+            <p
+              class="max-w-2xl text-sm leading-relaxed text-bone/85 md:text-base"
+            >
+              {tour.description}
+            </p>
+            <div
+              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6"
+            >
+              <a
+                href="#contact"
+                class="inline-flex items-center justify-center rounded-full border border-accent/40 bg-accent/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-accent transition hover:border-accent hover:bg-accent/20 hover:text-champagne"
+              >
+                Vraag beschikbaarheid aan
+              </a>
+              <span class="text-xs uppercase tracking-[0.35em] text-bone/65">
+                Vanaf {tour.price.replace("\n", " / ")}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
+      <div class="grid gap-16 lg:grid-cols-[2fr,1fr]">
+        <div class="space-y-16">
+          <section class="space-y-6">
+            <h2 class="font-display text-2xl text-bone md:text-3xl">
+              Wat u kunt verwachten
+            </h2>
+            <p class="text-sm leading-relaxed text-bone/70 md:text-base">
+              Elke tour wordt persoonlijk begeleid door Just Lisbon en afgestemd
+              op uw tempo. Hieronder ontdekt u de belangrijkste hoogtepunten,
+              een foto-impressie en de gedetailleerde volgorde van de dag.
+            </p>
+          </section>
+
+          <TourHighlights landmarks={tour.landmarks} />
+
+          <section class="space-y-4">
+            <header class="space-y-2">
+              <p class="text-xs uppercase tracking-[0.35em] text-bone/40">
+                Foto-impressie
+              </p>
+              <h2 class="font-display text-2xl text-bone md:text-3xl">
+                Een sfeerbeeld van de ervaring
+              </h2>
+            </header>
+            <div class="grid gap-4 sm:grid-cols-2">
+              {
+                tour.images.map((_image) => (
+                  <figure class="group overflow-hidden rounded-3xl border border-bone/10 bg-slate/20 transition hover:border-accent/60 hover:shadow-glow">
+                    <img
+                      src={
+                        "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"
+                      }
+                      alt={`${tour.name} sfeerbeeld`}
+                      class="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </figure>
+                ))
+              }
+            </div>
+          </section>
+
+          <TourTimeline
+            timeline={tour.timeline}
+            title="Stap voor stap door de tour"
+          />
+        </div>
+
+        <aside class="space-y-6">
+          <div
+            class="sticky top-32 space-y-6 rounded-3xl border border-bone/10 bg-slate/30 p-8 shadow-lg shadow-black/10 backdrop-blur"
+          >
+            <h2 class="font-display text-2xl text-bone">
+              Inbegrepen in deze tour
+            </h2>
+            <ul class="space-y-4 text-sm text-bone/70">
+              {
+                tour.included.map((item) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-accent/80" />
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="border-t border-bone/10 pt-6 text-sm text-bone/70">
+              <p class="text-xs uppercase tracking-[0.3em] text-bone/40">
+                Prijsindicatie
+              </p>
+              <p
+                class="mt-3 whitespace-pre-line text-lg font-semibold text-bone"
+              >
+                {tour.price}
+              </p>
+            </div>
+            <a
+              href="#contact"
+              class="inline-flex w-full items-center justify-center rounded-full border border-accent/40 px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-accent transition hover:border-accent hover:text-champagne"
+            >
+              Plan uw consult
+            </a>
+            <p class="text-[0.7rem] uppercase tracking-[0.3em] text-bone/40">
+              Persoonlijke aanpassingen zijn altijd mogelijk. Laat ons weten wat
+              u wenst.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </article>
+  <Concierge />
+  <Footer />
+</BaseLayout>

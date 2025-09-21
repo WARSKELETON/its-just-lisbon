@@ -1,0 +1,34 @@
+---
+import type { Tour } from '../data/tours';
+
+interface Props {
+  timeline: Tour['timeline'];
+  title?: string;
+  className?: string;
+}
+
+const { timeline, title, className = '' } = Astro.props as Props;
+const containerClass = ['space-y-8', className].filter(Boolean).join(' ');
+---
+<section class={containerClass}>
+  {title ? (
+    <header class="space-y-2">
+      <p class="text-xs uppercase tracking-[0.35em] text-bone/40">Dagplanning</p>
+      <h2 class="font-display text-2xl text-bone md:text-3xl">{title}</h2>
+    </header>
+  ) : null}
+  <ol class="space-y-6">
+    {timeline.map((item) => (
+      <li
+        class="group rounded-3xl border border-bone/10 bg-slate/30 p-6 transition hover:border-accent/60 hover:shadow-glow"
+        key={`${item.time}-${item.title}`}
+      >
+        <div class="flex flex-wrap items-baseline justify-between gap-3">
+          <span class="text-xs uppercase tracking-[0.3em] text-accent">{item.time}</span>
+          <h3 class="font-display text-xl text-bone md:text-2xl">{item.title}</h3>
+        </div>
+        <p class="mt-4 text-sm text-bone/70">{item.description}</p>
+      </li>
+    ))}
+  </ol>
+</section>
