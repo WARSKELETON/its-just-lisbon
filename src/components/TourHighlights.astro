@@ -1,13 +1,17 @@
 ---
-import type { Tour } from "../data/tours";
+import type { Tour } from "../types/tour";
 
 interface Props {
   landmarks: Tour["landmarks"];
   className?: string;
 }
 
-const { landmarks, className = "" } = Astro.props as Props;
+const { landmarks, className = "" } = Astro.props;
 const containerClass = ["space-y-4", className].filter(Boolean).join(" ");
+
+if (!landmarks || landmarks.length === 0) {
+  return null;
+}
 ---
 
 <section class={containerClass}>

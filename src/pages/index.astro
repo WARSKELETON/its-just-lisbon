@@ -7,17 +7,22 @@ import TourShowcase from '../components/TourShowcase';
 import Testimonials from '../components/Testimonials';
 import Concierge from '../components/Concierge';
 import Footer from '../components/Footer';
+import { getTours } from '../data/tours';
+
+const tours = await getTours();
+const featuredTour = tours[0];
 
 const meta = {
   title: 'Just Lisbon — Luxe privétours in Lissabon & Sintra',
-  description: 'Curated high-end privétours en experiences voor Nederlandse reizigers in Lissabon, Sintra en Cascais.'
+  description:
+    'Curated high-end privétours en experiences voor Nederlandse reizigers in Lissabon, Sintra en Cascais.'
 };
 ---
 <BaseLayout title={meta.title} description={meta.description}>
   <Navigation />
-  <Hero />
+  {featuredTour ? <Hero featuredTour={featuredTour} /> : null}
   <SignatureHighlights />
-  <TourShowcase />
+  <TourShowcase tours={tours} />
   <Testimonials />
   <Concierge />
   <Footer />

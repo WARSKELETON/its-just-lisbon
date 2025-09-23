@@ -1,9 +1,15 @@
 import type { FC } from 'react';
-import tours from '../data/tours';
+import type { Tour } from '../types/tour';
 
-const featuredTour = tours[0];
+interface HeroProps {
+  featuredTour: Tour;
+}
 
-const Hero: FC = () => {
+const DEFAULT_HERO_IMAGE = 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070';
+
+const Hero: FC<HeroProps> = ({ featuredTour }) => {
+  const heroImage = DEFAULT_HERO_IMAGE;
+
   return (
     <section className="relative isolate overflow-hidden pt-28 pb-24 md:pb-32">
       <div className="pointer-events-none absolute inset-0 opacity-80">
@@ -45,9 +51,8 @@ const Hero: FC = () => {
           <div className="relative flex flex-col gap-8">
             <div className="relative overflow-hidden rounded-[32px] border border-bone/10 bg-slate/30 shadow-glow">
               <img
-                src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"
-                alt={`${featuredTour.name} — ${featuredTour.location === 'lisbon' ? 'Lissabon' : 'Sintra'
-                  }`}
+                src={heroImage}
+                alt={`${featuredTour.name} — ${featuredTour.location === 'lisbon' ? 'Lissabon' : 'Sintra'}`}
                 className="h-full w-full object-cover brightness-95"
                 loading="lazy"
               />
@@ -56,9 +61,7 @@ const Hero: FC = () => {
                 <span className="inline-flex items-center rounded-full border border-white/20 px-3 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone/70 backdrop-blur">
                   {featuredTour.location === 'lisbon' ? 'Lisboa' : 'Sintra'}
                 </span>
-                <p className="max-w-xs font-display text-2xl text-bone">
-                  {featuredTour.name}
-                </p>
+                <p className="max-w-xs font-display text-2xl text-bone">{featuredTour.name}</p>
               </div>
             </div>
             <div className="relative rounded-[28px] border border-bone/10 bg-slate/40 p-8 shadow-glow">

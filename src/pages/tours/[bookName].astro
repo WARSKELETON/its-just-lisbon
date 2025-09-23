@@ -5,20 +5,29 @@ import Concierge from "../../components/Concierge";
 import Footer from "../../components/Footer";
 import TourTimeline from "../../components/TourTimeline.astro";
 import TourHighlights from "../../components/TourHighlights.astro";
-import tours from "../../data/tours";
+import { getTours } from "../../data/tours";
+import type { Tour } from "../../types/tour";
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const tours = await getTours();
+
   return tours.map((tour) => ({
     params: { bookName: tour.bookName },
+    props: { tour },
   }));
 }
 
-const { bookName } = Astro.params;
-const tour = tours.find((item) => item.bookName === bookName);
+const { tour } = Astro.props as { tour?: Tour };
 
 if (!tour) {
   throw new Response("Tour niet gevonden", { status: 404 });
 }
+
+const fallbackImage =
+  "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070";
+const heroImageDesktop =
+  tour.photoDesktop || tour.images[0]?.original || fallbackImage;
+const heroImageMobile = tour.photoMobile || heroImageDesktop;
 
 const meta = {
   title: `${tour.name} — Just Lisbon`,
@@ -113,12 +122,10 @@ const meta = {
             </header>
             <div class="grid gap-4 sm:grid-cols-2">
               {
-                tour.images.map((_image) => (
+                tour.images.map((image) => (
                   <figure class="group overflow-hidden rounded-3xl border border-bone/10 bg-slate/20 transition hover:border-accent/60 hover:shadow-glow">
                     <img
-                      src={
-                        "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"
-                      }
+                      src={image.original || fallbackImage}
                       alt={`${tour.name} sfeerbeeld`}
                       class="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-105"
                       loading="lazy"
