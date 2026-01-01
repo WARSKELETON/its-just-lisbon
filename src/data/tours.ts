@@ -9,19 +9,8 @@ type StoryblokStory = {
   content?: Record<string, unknown>;
 };
 
-type StoryblokTimelineEntry = {
-  time?: string;
-  title?: string;
-  description?: string;
-};
-
 type StoryblokAsset = {
-  filename?: string;
-  url?: string;
-};
-
-type StoryblokImageEntry = StoryblokAsset & {
-  thumbnail?: string;
+  filename: string;
 };
 
 const readString = (value: unknown): string =>
@@ -63,10 +52,6 @@ const readAsset = (value: unknown): string => {
     if (asset.filename) {
       return asset.filename;
     }
-
-    if (asset.url) {
-      return asset.url;
-    }
   }
 
   return '';
@@ -93,35 +78,6 @@ const toStringArray = (value: unknown): string[] => {
     .filter((part) => part.length > 0);
 };
 
-const toTimeline = (value: unknown): Tour['timeline'] => {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  const timeline: Tour['timeline'] = [];
-
-  for (const entry of value) {
-    if (!entry || typeof entry !== 'object') {
-      continue;
-    }
-
-    const item = entry as StoryblokTimelineEntry;
-    const time = readString(item.time);
-    const title = readString(item.title);
-    const description = readString(item.description);
-
-    if (time || title || description) {
-      timeline.push({
-        time: time || '00:00',
-        title: title || 'Programmaonderdeel',
-        description,
-      });
-    }
-  }
-
-  return timeline;
-};
-
 const toImages = (value: unknown): Tour['images'] => {
   if (!Array.isArray(value)) {
     return [];
@@ -134,16 +90,11 @@ const toImages = (value: unknown): Tour['images'] => {
       continue;
     }
 
-    const image = entry as StoryblokImageEntry;
-    const filename = readAsset(image.filename ?? image.url ?? image);
-
-    if (!filename) {
-      continue;
-    }
+    const image = entry as StoryblokAsset;
 
     images.push({
-      original: filename,
-      thumbnail: image.thumbnail ? image.thumbnail : filename,
+      original: image.filename ?? '',
+      thumbnail: image.filename ?? '',
     });
   }
 
@@ -164,6 +115,8 @@ const normalizeStory = (story: StoryblokStory, index: number): Tour => {
     fallbackTours[index] ??
     fallbackTours[0];
 
+  console.log(fallback);
+
   const name = readString(readField(content, ['name', 'title'])) || readString(story.name) || fallback.name;
   const description =
     readString(readField(content, ['description', 'intro', 'summary'])) || fallback.description;
@@ -179,47 +132,19 @@ const normalizeStory = (story: StoryblokStory, index: number): Tour => {
 
   const included = toStringArray(readField(content, ['included', 'inclusions']));
   const landmarks = toStringArray(readField(content, ['landmarks', 'highlights']));
-  const timeline = toTimeline(readField(content, ['timeline', 'schedule']));
   const images = toImages(readField(content, ['images', 'gallery', 'media']));
-
-  const photoMobile =
-    readAsset(
-      readField(content, [
-        'photoMobile',
-        'photo_mobile',
-        'heroImageMobile',
-        'hero_image_mobile',
-        'heroImage',
-        'hero_image',
-      ])
-    ) || images[0]?.original || fallback.photoMobile;
-
-  const photoDesktop =
-    readAsset(
-      readField(content, [
-        'photoDesktop',
-        'photo_desktop',
-        'heroImageDesktop',
-        'hero_image_desktop',
-        'heroImage',
-        'hero_image',
-      ])
-    ) || images[0]?.original || fallback.photoDesktop || photoMobile;
 
   return {
     id: typeof story.id === 'number' ? story.id : fallback.id,
     name,
     bookName,
     location,
-    photoMobile,
-    photoDesktop,
     toBook,
     description,
     landmarks: landmarks.length ? landmarks : [],
     included: included.length ? included : [],
     price,
     images: images.length ? images : [],
-    timeline: timeline.length ? timeline : [],
   };
 };
 

@@ -3,8 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Navigation from "../../components/Navigation";
 import Concierge from "../../components/Concierge";
 import Footer from "../../components/Footer";
-import TourTimeline from "../../components/TourTimeline.astro";
 import TourHighlights from "../../components/TourHighlights.astro";
+import TourPhotoGallery from "../../components/TourPhotoGallery.astro";
 import { getTours } from "../../data/tours";
 import type { Tour } from "../../types/tour";
 
@@ -25,9 +25,7 @@ if (!tour) {
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070";
-const heroImageDesktop =
-  tour.photoDesktop || tour.images[0]?.original || fallbackImage;
-const heroImageMobile = tour.photoMobile || heroImageDesktop;
+const heroImage = tour.images[0]?.original || fallbackImage;
 
 const meta = {
   title: `${tour.name} — Just Lisbon`,
@@ -41,15 +39,9 @@ const meta = {
     <section class="relative isolate overflow-hidden border-b border-bone/10">
       <div class="absolute inset-0">
         <img
-          src={"https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"}
+          src={heroImage}
           alt={tour.name}
-          class="hidden h-full w-full object-cover object-center md:block"
-          loading="lazy"
-        />
-        <img
-          src={"https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070"}
-          alt={tour.name}
-          class="h-full w-full object-cover object-center md:hidden"
+          class="h-full w-full object-cover object-center"
           loading="lazy"
         />
       </div>
@@ -98,47 +90,11 @@ const meta = {
     <section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-24">
       <div class="grid gap-16 lg:grid-cols-[2fr,1fr]">
         <div class="space-y-16">
-          <section class="space-y-6">
-            <h2 class="font-display text-2xl text-bone md:text-3xl">
-              Wat u kunt verwachten
-            </h2>
-            <p class="text-sm leading-relaxed text-bone/70 md:text-base">
-              Elke tour wordt persoonlijk begeleid door Just Lisbon en afgestemd
-              op uw tempo. Hieronder ontdekt u de belangrijkste hoogtepunten,
-              een foto-impressie en de gedetailleerde volgorde van de dag.
-            </p>
-          </section>
-
           <TourHighlights landmarks={tour.landmarks} />
 
-          <section class="space-y-4">
-            <header class="space-y-2">
-              <p class="text-xs uppercase tracking-[0.35em] text-bone/40">
-                Foto-impressie
-              </p>
-              <h2 class="font-display text-2xl text-bone md:text-3xl">
-                Een sfeerbeeld van de ervaring
-              </h2>
-            </header>
-            <div class="grid gap-4 sm:grid-cols-2">
-              {
-                tour.images.map((image) => (
-                  <figure class="group overflow-hidden rounded-3xl border border-bone/10 bg-slate/20 transition hover:border-accent/60 hover:shadow-glow">
-                    <img
-                      src={image.original || fallbackImage}
-                      alt={`${tour.name} sfeerbeeld`}
-                      class="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </figure>
-                ))
-              }
-            </div>
-          </section>
-
-          <TourTimeline
-            timeline={tour.timeline}
-            title="Stap voor stap door de tour"
+          <TourPhotoGallery
+            images={tour.images}
+            fallbackImage={fallbackImage}
           />
         </div>
 

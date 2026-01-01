@@ -1,0 +1,48 @@
+---
+import type { Tour } from "../types/tour";
+
+interface Props {
+    images: Tour["images"];
+    title?: string;
+    subtitle?: string;
+    className?: string;
+    fallbackImage?: string;
+}
+
+const {
+    images,
+    title = "Een sfeerbeeld van de ervaring",
+    subtitle = "Foto-impressie",
+    className = "",
+    fallbackImage = "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070",
+} = Astro.props;
+
+const containerClass = ["space-y-4", className].filter(Boolean).join(" ");
+
+if (!images || images.length === 0) {
+    return null;
+}
+---
+
+<section class={containerClass}>
+    <header class="space-y-2">
+        <p class="text-xs uppercase tracking-[0.35em] text-bone/40">
+            {subtitle}
+        </p>
+        <h2 class="font-display text-2xl text-bone md:text-3xl">{title}</h2>
+    </header>
+    <div class="grid gap-4 sm:grid-cols-2">
+        {
+            images.map((image) => (
+                <figure class="group overflow-hidden rounded-3xl border border-bone/10 bg-slate/20 transition hover:border-accent/60 hover:shadow-glow">
+                    <img
+                        src={image.original || fallbackImage}
+                        alt="Sfeerbeeld van de ervaring"
+                        class="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-105"
+                        loading="lazy"
+                    />
+                </figure>
+            ))
+        }
+    </div>
+</section>

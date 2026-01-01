@@ -8,7 +8,7 @@ interface HeroProps {
 const DEFAULT_HERO_IMAGE = 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070';
 
 const Hero: FC<HeroProps> = ({ featuredTour }) => {
-  const heroImage = DEFAULT_HERO_IMAGE;
+  const heroImage = featuredTour.images[0]?.original || DEFAULT_HERO_IMAGE;
 
   return (
     <section className="relative isolate overflow-hidden pt-28 pb-24 md:pb-32">

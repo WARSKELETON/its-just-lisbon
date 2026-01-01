@@ -3,8 +3,6 @@ export type Tour = {
   name: string;
   bookName: string;
   location: 'lisbon' | 'sintra';
-  photoMobile: string;
-  photoDesktop: string;
   toBook: boolean;
   description: string;
   landmarks: string[];
@@ -13,10 +11,5 @@ export type Tour = {
   images: Array<{
     original: string;
     thumbnail: string;
-  }>;
-  timeline: Array<{
-    time: string;
-    title: string;
-    description: string;
   }>;
 };

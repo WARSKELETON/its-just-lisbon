@@ -36,8 +36,6 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
         </div>
         <div className="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-3">
           {tours.map((tour) => {
-            const cardImage = DEFAULT_CARD_IMAGE;
-
             return (
               <article
                 key={tour.id}
@@ -45,7 +43,7 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
               >
                 <div className="relative">
                   <img
-                    src={cardImage}
+                    src={tour.images[0]?.original || DEFAULT_CARD_IMAGE}
                     alt={`${tour.name} — ${locationLabels[tour.location]}`}
                     loading="lazy"
                     className="h-64 w-full object-cover"
