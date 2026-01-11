@@ -8,9 +8,6 @@ const Navigation: FC = () => {
           Just Lisbon
         </a>
         <div className="hidden items-center gap-8 text-[0.7rem] uppercase tracking-[0.35em] text-bone/60 md:flex">
-          <a href="/#waarden" className="transition hover:text-accent">
-            Filosofie
-          </a>
           <a href="/#tours" className="transition hover:text-accent">
             Tours
           </a>

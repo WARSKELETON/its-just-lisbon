@@ -9,9 +9,6 @@ const Footer: FC = () => {
           <p className="mt-2 text-xs uppercase tracking-[0.3em] text-bone/40">Luxe tours • Lissabon &amp; Sintra</p>
         </div>
         <div className="flex flex-wrap gap-6">
-          <a href="#waarden" className="uppercase tracking-[0.3em] transition hover:text-accent">
-            Filosofie
-          </a>
           <a href="#tours" className="uppercase tracking-[0.3em] transition hover:text-accent">
             Signature tours
           </a>
@@ -20,7 +17,7 @@ const Footer: FC = () => {
           </a>
         </div>
         <div className="space-y-1 text-right text-xs">
-          <p>Rua das Flores 108, 1200-194 Lisboa</p>
+          <p>RNAAT 259/2022</p>
           <p>+351 912 345 678 • concierge@justlisbon.pt</p>
         </div>
       </div>

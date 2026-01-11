@@ -93,7 +93,7 @@ const countries = countryCodes
 
     <form
       id="booking-form"
-      name="booking-request"
+      name="booking"
       method="POST"
       action="/success"
       data-netlify="true"
@@ -731,14 +731,6 @@ const countries = countryCodes
     submitButton.disabled = true;
     submitText.textContent = "Bezig met verzenden...";
     loadingSpinner.classList.remove("hidden");
-
-    // Disable all form inputs
-    const allInputs = form.querySelectorAll("input, select, textarea, button");
-    allInputs.forEach((input) => {
-      if (input !== submitButton) {
-        (input as HTMLInputElement).disabled = true;
-      }
-    });
   });
 
   // Initialize
