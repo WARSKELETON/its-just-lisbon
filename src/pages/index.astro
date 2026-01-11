@@ -10,8 +10,6 @@ import Footer from "../components/Footer";
 import { getTours } from "../data/tours";
 
 const tours = await getTours();
-const featuredTour = tours[0];
-
 const meta = {
   title: "Just Lisbon — Luxe privétours in Lissabon & Sintra",
   description:
@@ -20,8 +18,8 @@ const meta = {
 ---
 
 <BaseLayout title={meta.title} description={meta.description}>
-  <Navigation />
-  {featuredTour ? <Hero featuredTour={featuredTour} /> : null}
+  <Navigation variant="hero" />
+  <Hero />
   <!-- <SignatureHighlights /> -->
   <TourShowcase tours={tours} />
   <Testimonials />

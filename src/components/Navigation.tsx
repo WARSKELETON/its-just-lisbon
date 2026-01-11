@@ -1,8 +1,17 @@
 import type { FC } from 'react';
 
-const Navigation: FC = () => {
+interface NavigationProps {
+  variant?: 'default' | 'hero';
+}
+
+const Navigation: FC<NavigationProps> = ({ variant = 'default' }) => {
+  const headerClasses =
+    variant === 'hero'
+      ? 'fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/20 backdrop-blur-sm'
+      : 'fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-md';
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-md">
+    <header className={headerClasses}>
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8">
         <a href="/" className="font-display text-xl text-bone">
           Just Lisbon

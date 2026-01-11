@@ -15,7 +15,6 @@ const DEFAULT_CARD_IMAGE = 'https://images.unsplash.com/photo-1555881400-74d7aca
 const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
   return (
     <section id="tours" className="relative border-t border-bone/10 py-24">
-      <div className="pointer-events-none absolute inset-x-0 -top-24 h-56 bg-gradient-to-b from-accent/10 to-transparent" />
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
