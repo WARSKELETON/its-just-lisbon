@@ -1,0 +1,76 @@
+---
+import renate from "../images/renate.jpg";
+
+const highlights = [
+  "Nederlandstalige begeleiding",
+  "Lokale chefs en chauffeurs",
+  "Discreet en persoonlijk",
+  "Volledig op maat",
+];
+---
+
+<section id="about" class="relative border-t border-bone/10 py-24">
+  <div
+    class="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)] lg:items-center lg:px-8"
+  >
+    <figure
+      class="relative overflow-hidden rounded-3xl border border-bone/10 bg-slate/30 shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+    >
+      <img
+        src={renate.src}
+        width={renate.width}
+        height={renate.height}
+        alt="Renate, Nederlandse tour operator in Lissabon"
+        class="h-full w-full object-cover"
+        loading="lazy"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"
+      >
+      </div>
+      <figcaption
+        class="absolute bottom-6 left-6 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-[0.65rem] uppercase tracking-[0.35em] text-bone/80 backdrop-blur"
+      >
+        Renate - Nederlandse Gids
+      </figcaption>
+    </figure>
+
+    <div class="space-y-6">
+      <p class="text-xs uppercase tracking-[0.4em] text-bone/40">
+        Over de host
+      </p>
+      <h2 class="font-display text-3xl text-bone md:text-4xl">
+        Renate, de Nederlandse tour operator achter Just Lisbon.
+      </h2>
+      <p class="text-sm text-bone/70">
+        Renate begeleidt elke ervaring met een mix van Nederlandse helderheid en
+        Portugese finesse. Ze luistert naar uw ritme, vertaalt uw wensen naar
+        een verfijnd programma en bewaakt elk detail tot de laatste transfer.
+      </p>
+      <p class="text-sm text-bone/70">
+        Dankzij haar lokale netwerk opent ze deuren die normaal gesloten
+        blijven. Denk aan een private proeverij in Alfama, een ochtend zonder
+        wachtrijen in Sintra of een zonsondergang langs de kust met de juiste
+        timing.
+      </p>
+      <ul class="grid gap-4 text-sm text-bone/70 sm:grid-cols-2">
+        {
+          highlights.map((item) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-accent/80" />
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="pt-4">
+        <a
+          href="#contact"
+          class="inline-flex items-center rounded-full border border-accent/40 px-6 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-accent transition hover:border-accent hover:text-champagne"
+        >
+          Plan uw kennismaking
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
