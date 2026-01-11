@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Navigation from "../../components/Navigation";
-import Concierge from "../../components/Concierge";
+import Concierge from "../../components/Concierge.astro";
 import Footer from "../../components/Footer";
 import TourHighlights from "../../components/TourHighlights.astro";
 import TourPhotoGallery from "../../components/TourPhotoGallery.astro";
@@ -140,6 +140,6 @@ const meta = {
       </div>
     </section>
   </article>
-  <Concierge />
+  <Concierge selectedTour={tour.name} />
   <Footer />
 </BaseLayout>

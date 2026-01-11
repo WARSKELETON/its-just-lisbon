@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
+
+const meta = {
+  title: "Bedankt voor uw aanvraag — Just Lisbon",
+  description: "Uw aanvraag voor een privétour is succesvol ontvangen.",
+};
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <Navigation />
+
+  <section
+    class="relative flex min-h-[70vh] items-center justify-center overflow-hidden py-24"
+  >
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate/40 via-transparent to-slate/20"
+    >
+    </div>
+
+    <div class="relative mx-auto max-w-3xl px-6 text-center">
+      <header class="space-y-6">
+        <p class="text-xs uppercase tracking-[0.4em] text-accent font-semibold">
+          Aanvraag ontvangen
+        </p>
+        <h1 class="font-display text-4xl text-bone md:text-6xl">
+          Bedankt voor uw interesse in Lissabon.
+        </h1>
+        <p class="mx-auto max-w-xl text-lg text-bone/70">
+          Wij hebben uw bericht in goede orde ontvangen. Onze Lisbon curator
+          gaat direct voor u aan de slag en u ontvangt binnen 24 uur een
+          persoonlijk voorstel.
+        </p>
+      </header>
+
+      <div class="mt-12 flex flex-col items-center gap-6">
+        <div class="h-px w-24 bg-bone/20"></div>
+        <a
+          href="/"
+          class="inline-flex h-14 items-center justify-center rounded-full border border-bone/20 bg-transparent px-10 text-sm font-semibold uppercase tracking-[0.3em] text-bone transition hover:bg-bone hover:text-midnight"
+        >
+          Terug naar home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

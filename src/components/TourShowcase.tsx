@@ -27,12 +27,6 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
               Combineer wandelingen door volksbuurten en culinaire hotspots met exclusieve Sintra-landgoederen. Onze selectie is ontworpen voor kleine gezelschappen die Nederlandstalige begeleiding waarderen.
             </p>
           </div>
-          <a
-            href="#contact"
-            className="inline-flex h-12 items-center justify-center rounded-full border border-accent/40 px-6 text-xs font-semibold uppercase tracking-[0.3em] text-accent transition hover:border-accent hover:text-champagne"
-          >
-            Vraag een persoonlijk voorstel aan
-          </a>
         </div>
         <div className="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-3">
           {tours.map((tour) => {

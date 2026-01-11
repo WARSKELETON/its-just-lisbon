@@ -1,0 +1,746 @@
+---
+import countryCodes from "country-codes-list";
+import { getTours } from "../data/tours";
+
+interface Props {
+  selectedTour?: string;
+}
+
+const { selectedTour } = Astro.props;
+const tours = await getTours();
+
+// Set date constraints
+const today = new Date();
+const maxDate = new Date();
+maxDate.setMonth(maxDate.getMonth() + 3);
+
+const todayStr = today.toISOString().split("T")[0];
+const maxDateStr = maxDate.toISOString().split("T")[0];
+
+const countries = countryCodes
+  .all()
+  .map((c) => ({
+    code: `+${c.countryCallingCode}`,
+    label: `${c.countryNameEn} (+${c.countryCallingCode})`,
+  }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+---
+
+<section
+  id="contact"
+  class="relative overflow-hidden border-t border-bone/10 py-24"
+>
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate/40 via-transparent to-slate/20"
+  >
+  </div>
+  <div
+    class="relative mx-4 max-w-5xl rounded-3xl border border-bone/10 bg-slate/30 p-6 backdrop-blur-xl sm:mx-auto sm:p-8 md:p-10 lg:p-16"
+  >
+    <header class="max-w-3xl space-y-6">
+      <p class="text-xs uppercase tracking-[0.4em] text-bone/40">
+        Travel concierge
+      </p>
+      <h2 class="font-display text-4xl text-bone md:text-5xl">
+        Uw persoonlijke Lisbon curator staat klaar.
+      </h2>
+      <p class="text-bone/70">
+        Deel uw reiswensen en wij ontwerpen een voorstel binnen 24 uur. Volledig
+        flexibel, met advies vanuit ons team in het hart van Lissabon.
+      </p>
+    </header>
+
+    <!-- Step Indicator -->
+    <div
+      class="mt-10 mb-8 px-0 sm:px-64 grid grid-cols-[1fr_auto_1fr] grid-rows-[auto_auto] items-center justify-center gap-x-6 gap-y-2 text-center sm:mt-12 sm:gap-x-8"
+    >
+      <div class="flex justify-center">
+        <div
+          id="step-indicator-1"
+          class="step-indicator flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent bg-accent text-sm font-semibold text-midnight transition-all"
+        >
+          1
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center">
+        <span class="h-0.5 w-12 bg-bone/20 sm:w-16"></span>
+      </div>
+
+      <div class="flex justify-center">
+        <div
+          id="step-indicator-2"
+          class="step-indicator flex h-10 w-10 items-center justify-center rounded-full border-2 border-bone/30 bg-transparent text-sm font-semibold text-bone/30 transition-all"
+        >
+          2
+        </div>
+      </div>
+
+      <span
+        id="step-label-1"
+        class="col-start-1 row-start-2 max-w-[9rem] justify-self-center text-xs font-medium leading-snug text-bone sm:text-sm"
+      >
+        Persoonlijke gegevens
+      </span>
+
+      <span
+        id="step-label-2"
+        class="col-start-3 row-start-2 max-w-[9rem] justify-self-center text-xs leading-snug text-bone/30 sm:text-sm"
+      >
+        Tour details
+      </span>
+    </div>
+
+    <form
+      id="booking-form"
+      name="booking-request"
+      method="POST"
+      action="/success"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      class="mt-8"
+    >
+      <p class="hidden">
+        <label>
+          Don't fill this out if you're human: <input name="bot-field" />
+        </label>
+      </p>
+
+      <!-- Step 1: Personal Information & Tour Selection -->
+      <div id="step-1" class="grid gap-5 sm:gap-6 md:grid-cols-2">
+        <div class="flex flex-col gap-2">
+          <label
+            for="naam"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Naam
+          </label>
+          <input
+            type="text"
+            id="naam"
+            name="naam"
+            required
+            autocomplete="name"
+            maxlength="100"
+            placeholder="Bijv. Sophie van Dijk"
+            aria-required="true"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+          />
+          <span class="error-message hidden text-xs text-red-400 mt-1"></span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label
+            for="email"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            E-mail
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            maxlength="254"
+            placeholder="uw@email.nl"
+            aria-required="true"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+          />
+          <span class="error-message hidden text-xs text-red-400 mt-1"></span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label
+            for="telefoon"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Telefoon
+          </label>
+          <div
+            class="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,200px),1fr] sm:gap-4"
+          >
+            <div class="relative">
+              <select
+                id="landcode"
+                name="landcode"
+                required
+                aria-label="Landcode"
+                aria-required="true"
+                class="form-input w-full rounded-2xl border border-bone/20 bg-midnight/80 pl-4 pr-10 py-4 text-sm text-bone focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 appearance-none transition-all bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlPSIjZDRjNWIwIj48cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTE5IDlsLTcgNy03LTciPjwvcGF0aD48L3N2Zz4=')] bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat"
+              >
+                {
+                  countries.map((c) => (
+                    <option value={c.code} selected={c.code === "+31"}>
+                      {c.label}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+            <div class="relative">
+              <span
+                id="landcode-prefix"
+                aria-hidden="true"
+                class="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm text-bone/70"
+              >
+                +31
+              </span>
+              <input
+                type="tel"
+                id="telefoon"
+                name="telefoon"
+                required
+                autocomplete="tel-national"
+                maxlength="15"
+                placeholder="6 12345678"
+                aria-label="Telefoonnummer"
+                aria-required="true"
+                class="form-input rounded-2xl border border-bone/20 bg-midnight/80 pl-14 pr-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+              />
+            </div>
+          </div>
+          <span class="error-message hidden text-xs text-red-400 mt-1">
+            Vul een geldige landcode en telefoonnummer in
+          </span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label
+            for="tour"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Interesse in tour
+          </label>
+          <select
+            id="tour"
+            name="tour"
+            required
+            aria-required="true"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 pr-12 text-sm text-bone focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 appearance-none transition-all bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlPSIjZDRjNWIwIj48cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTE5IDlsLTcgNy03LTciPjwvcGF0aD48L3N2Zz4=')] bg-[length:1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
+          >
+            <option value="" disabled selected={!selectedTour}>
+              Kies uw favoriete ervaring
+            </option>
+            {
+              tours.map((tour) => (
+                <option value={tour.name} selected={selectedTour === tour.name}>
+                  {tour.name}
+                </option>
+              ))
+            }
+          </select>
+          <span class="error-message hidden text-xs text-red-400 mt-1"></span>
+        </div>
+
+        <div
+          class="md:col-span-2 flex flex-col justify-stretch gap-3 mt-4 sm:flex-row sm:justify-end sm:gap-4"
+        >
+          <button
+            type="button"
+            id="next-button"
+            class="inline-flex h-14 w-full items-center justify-center rounded-full border border-transparent bg-accent px-10 text-sm font-semibold uppercase tracking-[0.25em] text-midnight transition hover:bg-champagne focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-midnight sm:w-auto sm:tracking-[0.3em]"
+          >
+            Volgende
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Tour Details & Additional Information -->
+      <div id="step-2" class="hidden gap-6 md:grid-cols-2">
+        <div class="flex flex-col gap-2">
+          <label
+            for="datum"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Gewenste datum
+          </label>
+          <input
+            type="date"
+            id="datum"
+            name="datum"
+            required
+            min={todayStr}
+            max={maxDateStr}
+            aria-required="true"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 text-sm text-bone focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all [&::-webkit-calendar-picker-indicator]:invert-[0.8] [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+          />
+          <span class="error-message hidden text-xs text-red-400 mt-1"></span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label
+            for="tijd"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Tijd voorkeur
+          </label>
+          <select
+            id="tijd"
+            name="tijd_voorkeur"
+            required
+            aria-required="true"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 pr-12 text-sm text-bone focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 appearance-none transition-all bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlPSIjZDRjNWIwIj48cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTE5IDlsLTcgNy03LTciPjwvcGF0aD48L3N2Zz4=')] bg-[length:1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
+          >
+            <option value="" disabled selected>Selecteer uw voorkeur</option>
+            <option value="Ochtend (9:00 - 12:00)"
+              >Ochtend (9:00 - 12:00)</option
+            >
+            <option value="Middag (12:00 - 17:00)"
+              >Middag (12:00 - 17:00)</option
+            >
+            <option value="Avond (17:00 - 20:00)">Avond (17:00 - 20:00)</option>
+            <option value="Geen voorkeur">Geen voorkeur</option>
+          </select>
+          <span class="error-message hidden text-xs text-red-400 mt-1"></span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label
+            for="gasten"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Aantal Personen
+          </label>
+          <input
+            type="number"
+            id="gasten"
+            name="aantal_personen"
+            min="1"
+            max="50"
+            required
+            aria-required="true"
+            placeholder="2"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all [&::-webkit-inner-spin-button]:opacity-50 [&::-webkit-outer-spin-button]:opacity-50"
+          />
+          <span class="error-message hidden text-xs text-red-400 mt-1"></span>
+        </div>
+
+        <div class="md:col-span-2 flex flex-col gap-2">
+          <label
+            for="notities"
+            class="text-xs uppercase tracking-[0.3em] text-bone/50"
+          >
+            Extra Notities <span class="text-bone/40">(optioneel)</span>
+          </label>
+          <textarea
+            id="notities"
+            name="notities"
+            rows="4"
+            maxlength="1000"
+            placeholder="bijv. vegetarisch eten, toegankelijkheid, kinderen (leeftijd 8 & 10), fotografie interesse"
+            class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 text-sm text-bone placeholder:text-bone/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 resize-none transition-all"
+          ></textarea>
+          <div class="flex justify-between items-center">
+            <span class="error-message hidden text-xs text-red-400"></span>
+            <span id="char-counter" class="text-xs text-bone/40">
+              0 / 1000
+            </span>
+          </div>
+        </div>
+
+        <!-- GDPR Consent -->
+        <div class="md:col-span-2 flex items-start gap-3 mt-2">
+          <input
+            type="checkbox"
+            id="gdpr-consent"
+            name="gdpr_consent"
+            required
+            aria-required="true"
+            class="mt-1 h-5 w-5 rounded border-bone/20 bg-midnight/80 text-accent focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-midnight transition-all"
+          />
+          <label
+            for="gdpr-consent"
+            class="text-sm text-bone/70 leading-relaxed"
+          >
+            Ik ga akkoord met het <a
+              href="/privacy"
+              class="text-accent hover:text-champagne underline transition-colors"
+              >privacybeleid</a
+            > en geef toestemming om mijn gegevens te verwerken voor het behandelen
+            van mijn aanvraag.
+          </label>
+        </div>
+        <span
+          class="md:col-span-2 error-message hidden text-xs text-red-400 -mt-4"
+        >
+          U moet akkoord gaan met het privacybeleid om verder te gaan.
+        </span>
+
+        <div
+          class="md:col-span-2 flex flex-col-reverse items-stretch gap-3 mt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+        >
+          <button
+            type="button"
+            id="prev-button"
+            class="inline-flex h-14 w-full items-center justify-center rounded-full border border-bone/30 bg-transparent px-8 text-sm font-semibold uppercase tracking-[0.25em] text-bone transition hover:border-accent hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-midnight sm:w-auto sm:tracking-[0.3em]"
+          >
+            Vorige
+          </button>
+
+          <button
+            type="submit"
+            id="submit-button"
+            class="inline-flex h-14 w-full items-center justify-center rounded-full border border-transparent bg-accent px-10 text-sm font-semibold uppercase tracking-[0.25em] text-midnight transition hover:bg-champagne focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-midnight disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:tracking-[0.3em]"
+          >
+            <span id="submit-text">Verstuur mijn verzoek</span>
+            <svg
+              id="loading-spinner"
+              class="hidden animate-spin ml-3 h-5 w-5 text-midnight"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <p
+          class="md:col-span-2 text-center text-[0.65rem] uppercase tracking-[0.25em] text-bone/40 sm:text-left"
+        >
+          * Wij nemen binnen 24 uur contact met u op met een eerste voorstel.
+        </p>
+      </div>
+    </form>
+    <script>
+      const landcodeSelect = document.getElementById("landcode");
+      const landcodePrefix = document.getElementById("landcode-prefix");
+
+      if (landcodeSelect && landcodePrefix) {
+        const updatePrefix = () => {
+          landcodePrefix.textContent = landcodeSelect.value || "+31";
+        };
+        updatePrefix();
+        landcodeSelect.addEventListener("change", updatePrefix);
+      }
+    </script>
+  </div>
+</section>
+
+<script>
+  // Multi-step form logic
+  const form = document.getElementById("booking-form") as HTMLFormElement;
+  const step1 = document.getElementById("step-1") as HTMLElement;
+  const step2 = document.getElementById("step-2") as HTMLElement;
+  const nextButton = document.getElementById(
+    "next-button",
+  ) as HTMLButtonElement;
+  const prevButton = document.getElementById(
+    "prev-button",
+  ) as HTMLButtonElement;
+  const submitButton = document.getElementById(
+    "submit-button",
+  ) as HTMLButtonElement;
+  const submitText = document.getElementById("submit-text") as HTMLElement;
+  const loadingSpinner = document.getElementById(
+    "loading-spinner",
+  ) as HTMLElement;
+
+  // Step indicators
+  const stepIndicator1 = document.getElementById(
+    "step-indicator-1",
+  ) as HTMLElement;
+  const stepIndicator2 = document.getElementById(
+    "step-indicator-2",
+  ) as HTMLElement;
+  const stepLabel1 = document.getElementById("step-label-1") as HTMLElement;
+  const stepLabel2 = document.getElementById("step-label-2") as HTMLElement;
+
+  // Form fields
+  const naamInput = document.getElementById("naam") as HTMLInputElement;
+  const emailInput = document.getElementById("email") as HTMLInputElement;
+  const landcodeInput = document.getElementById(
+    "landcode",
+  ) as HTMLSelectElement;
+  const telefoonInput = document.getElementById("telefoon") as HTMLInputElement;
+  const tourSelect = document.getElementById("tour") as HTMLSelectElement;
+  const notitiesTextarea = document.getElementById(
+    "notities",
+  ) as HTMLTextAreaElement;
+  const charCounter = document.getElementById("char-counter") as HTMLElement;
+  const gdprCheckbox = document.getElementById(
+    "gdpr-consent",
+  ) as HTMLInputElement;
+
+  let currentStep = 1;
+
+  // Validation helpers
+  function showError(element: HTMLElement, message: string = "") {
+    const errorSpan = element
+      .closest(".flex-col")
+      ?.querySelector(".error-message") as HTMLElement;
+    if (errorSpan) {
+      if (message) {
+        errorSpan.textContent = message;
+      }
+      errorSpan.classList.remove("hidden");
+    }
+    element.classList.remove("border-bone/20", "border-green-500/50");
+    element.classList.add("border-red-400");
+  }
+
+  function hideError(element: HTMLElement) {
+    const errorSpan = element
+      .closest(".flex-col")
+      ?.querySelector(".error-message") as HTMLElement;
+    if (errorSpan) {
+      errorSpan.classList.add("hidden");
+    }
+    element.classList.remove("border-red-400");
+    element.classList.add("border-bone/20");
+  }
+
+  function showSuccess(element: HTMLElement) {
+    hideError(element);
+    element.classList.remove("border-bone/20", "border-red-400");
+    element.classList.add("border-green-500/50");
+  }
+
+  function validateField(
+    field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+  ): boolean {
+    if (field.hasAttribute("required") && !field.value.trim()) {
+      showError(field, "Dit veld is verplicht");
+      return false;
+    }
+
+    if (field.type === "email") {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(field.value)) {
+        showError(field, "Vul een geldig e-mailadres in");
+        return false;
+      }
+    }
+
+    if (field.type === "tel" || field.id === "landcode") {
+      const isLandcodeValid = /^\+?[0-9]{1,4}$/.test(landcodeInput.value);
+      const isTelefoonValid = /^[0-9\s\-\(\)]{4,15}$/.test(telefoonInput.value);
+
+      if (!isLandcodeValid || !isTelefoonValid) {
+        if (!isLandcodeValid) showError(landcodeInput);
+        else showSuccess(landcodeInput);
+
+        if (!isTelefoonValid) showError(telefoonInput);
+        else showSuccess(telefoonInput);
+
+        return false;
+      }
+
+      showSuccess(landcodeInput);
+      showSuccess(telefoonInput);
+      return true;
+    }
+
+    showSuccess(field);
+    return true;
+  }
+
+  function validateStep1(): boolean {
+    const fields = [
+      naamInput,
+      emailInput,
+      landcodeInput,
+      telefoonInput,
+      tourSelect,
+    ];
+    let isValid = true;
+
+    fields.forEach((field) => {
+      if (!validateField(field)) {
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  }
+
+  function validateStep2(): boolean {
+    const datumInput = document.getElementById("datum") as HTMLInputElement;
+    const tijdSelect = document.getElementById("tijd") as HTMLSelectElement;
+    const gastenInput = document.getElementById("gasten") as HTMLInputElement;
+
+    const fields = [datumInput, tijdSelect, gastenInput];
+    let isValid = true;
+
+    fields.forEach((field) => {
+      if (!validateField(field)) {
+        isValid = false;
+      }
+    });
+
+    // Validate GDPR checkbox
+    const gdprError = document.querySelector(
+      "#step-2 > .error-message:last-of-type",
+    ) as HTMLElement;
+    if (!gdprCheckbox.checked) {
+      if (gdprError) {
+        gdprError.classList.remove("hidden");
+      }
+      isValid = false;
+    } else {
+      if (gdprError) {
+        gdprError.classList.add("hidden");
+      }
+    }
+
+    return isValid;
+  }
+
+  function updateStepIndicator() {
+    if (currentStep === 1) {
+      // Step 1 active
+      stepIndicator1.classList.add(
+        "border-accent",
+        "bg-accent",
+        "text-midnight",
+      );
+      stepIndicator1.classList.remove(
+        "border-bone/30",
+        "bg-transparent",
+        "text-bone/30",
+      );
+      stepLabel1.classList.add("text-bone", "font-medium");
+      stepLabel1.classList.remove("text-bone/30");
+
+      stepIndicator2.classList.remove(
+        "border-accent",
+        "bg-accent",
+        "text-midnight",
+      );
+      stepIndicator2.classList.add(
+        "border-bone/30",
+        "bg-transparent",
+        "text-bone/30",
+      );
+      stepLabel2.classList.remove("text-bone", "font-medium");
+      stepLabel2.classList.add("text-bone/30");
+    } else {
+      // Step 2 active
+      stepIndicator1.classList.remove("border-accent", "bg-accent");
+      stepIndicator1.classList.add("border-green-500", "bg-green-500");
+
+      stepIndicator2.classList.add(
+        "border-accent",
+        "bg-accent",
+        "text-midnight",
+      );
+      stepIndicator2.classList.remove(
+        "border-bone/30",
+        "bg-transparent",
+        "text-bone/30",
+      );
+      stepLabel2.classList.add("text-bone", "font-medium");
+      stepLabel2.classList.remove("text-bone/30");
+    }
+  }
+
+  function goToStep2() {
+    step1.classList.add("hidden");
+    step1.classList.remove("grid");
+    step2.classList.remove("hidden");
+    step2.classList.add("grid");
+    currentStep = 2;
+    updateStepIndicator();
+  }
+
+  function goToStep1() {
+    step2.classList.add("hidden");
+    step2.classList.remove("grid");
+    step1.classList.remove("hidden");
+    step1.classList.add("grid");
+    currentStep = 1;
+    updateStepIndicator();
+  }
+
+  // Event listeners
+  nextButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (validateStep1()) {
+      goToStep2();
+    }
+  });
+
+  prevButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    goToStep1();
+  });
+
+  // Real-time validation for phone fields
+  [landcodeInput, telefoonInput].forEach((field) => {
+    const eventType = field instanceof HTMLSelectElement ? "change" : "input";
+    field.addEventListener(eventType, () => {
+      if (landcodeInput.value.length > 0 || telefoonInput.value.length > 0) {
+        validateField(field);
+      } else {
+        hideError(landcodeInput);
+        hideError(telefoonInput);
+      }
+    });
+  });
+
+  // Real-time validation for other fields on blur
+  [naamInput, emailInput].forEach((field) => {
+    field.addEventListener("blur", () => {
+      if (field.value.length > 0) {
+        validateField(field);
+      }
+    });
+  });
+
+  tourSelect.addEventListener("change", () => {
+    validateField(tourSelect);
+  });
+
+  // Character counter for notes
+  notitiesTextarea.addEventListener("input", () => {
+    const count = notitiesTextarea.value.length;
+    charCounter.textContent = `${count} / 1000`;
+
+    if (count > 900) {
+      charCounter.classList.remove("text-bone/40");
+      charCounter.classList.add("text-yellow-400");
+    } else if (count === 1000) {
+      charCounter.classList.remove("text-yellow-400");
+      charCounter.classList.add("text-red-400");
+    } else {
+      charCounter.classList.remove("text-yellow-400", "text-red-400");
+      charCounter.classList.add("text-bone/40");
+    }
+  });
+
+  // Form submission with loading state
+  form.addEventListener("submit", (e) => {
+    if (!validateStep2()) {
+      e.preventDefault();
+      return;
+    }
+
+    // Show loading state
+    submitButton.disabled = true;
+    submitText.textContent = "Bezig met verzenden...";
+    loadingSpinner.classList.remove("hidden");
+
+    // Disable all form inputs
+    const allInputs = form.querySelectorAll("input, select, textarea, button");
+    allInputs.forEach((input) => {
+      if (input !== submitButton) {
+        (input as HTMLInputElement).disabled = true;
+      }
+    });
+  });
+
+  // Initialize
+  updateStepIndicator();
+</script>

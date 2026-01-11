@@ -31,3 +31,6 @@ coverage/
 # Misc
 *.swp
 *.swo
+
+# Local Netlify folder
+.netlify
