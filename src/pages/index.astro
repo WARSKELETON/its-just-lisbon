@@ -5,14 +5,17 @@ import Hero from "../components/Hero";
 import SignatureHighlights from "../components/SignatureHighlights";
 import TourShowcase from "../components/TourShowcase";
 import Testimonials from "../components/Testimonials";
+import Faq from "../components/Faq.astro";
 import AboutRenate from "../components/AboutRenate.astro";
 import Concierge from "../components/Concierge.astro";
 import Footer from "../components/Footer";
 import { getTours } from "../data/tours";
 import { getReviews } from "../data/reviews";
+import { getFaqs } from "../data/faqs";
 
 const tours = await getTours();
 const reviews = await getReviews();
+const faqs = await getFaqs();
 const meta = {
   title: "Just Lisbon — Luxe privétours in Lissabon & Sintra",
   description:
@@ -26,6 +29,7 @@ const meta = {
   <!-- <SignatureHighlights /> -->
   <TourShowcase tours={tours} />
   <Testimonials reviews={reviews} />
+  <Faq faqs={faqs} />
   <AboutRenate />
   <Concierge />
   <Footer />
