@@ -1,20 +1,12 @@
 import type { Tour } from '../types/tour';
 import { getStoryblokApi } from '../lib/storyblok';
 import { fallbackTours } from './staticTours';
-
-type StoryblokStory = {
-  id?: number;
-  name?: string;
-  slug?: string;
-  content?: Record<string, unknown>;
-};
-
-type StoryblokAsset = {
-  filename: string;
-};
-
-const readString = (value: unknown): string =>
-  typeof value === 'string' ? value.trim() : '';
+import {
+  readField,
+  readString,
+  type StoryblokAsset,
+  type StoryblokStory,
+} from './storyblokContent';
 
 const readBoolean = (value: unknown, fallback: boolean): boolean =>
   typeof value === 'boolean' ? value : fallback;
@@ -35,35 +27,6 @@ const readLocation = (value: unknown, fallback: Tour['location']): Tour['locatio
   }
 
   return fallback;
-};
-
-const readAsset = (value: unknown): string => {
-  if (!value) {
-    return '';
-  }
-
-  if (typeof value === 'string') {
-    return value.trim();
-  }
-
-  if (typeof value === 'object') {
-    const asset = value as StoryblokAsset;
-
-    if (asset.filename) {
-      return asset.filename;
-    }
-  }
-
-  return '';
-};
-
-const readField = (content: Record<string, unknown>, keys: string[]): unknown => {
-  for (const key of keys) {
-    if (key in content) {
-      return content[key];
-    }
-  }
-  return undefined;
 };
 
 const toStringArray = (value: unknown): string[] => {
@@ -205,10 +168,6 @@ export const getTours = async (): Promise<Tour[]> => {
 export const getTourByBookName = async (bookName: string): Promise<Tour | undefined> => {
   const tours = await getTours();
   return tours.find((tour) => tour.bookName === bookName);
-};
-
-export const clearTourCache = () => {
-  cachedTours = null;
 };
 
 export type { Tour };

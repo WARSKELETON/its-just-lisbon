@@ -9,8 +9,10 @@ import AboutRenate from "../components/AboutRenate.astro";
 import Concierge from "../components/Concierge.astro";
 import Footer from "../components/Footer";
 import { getTours } from "../data/tours";
+import { getReviews } from "../data/reviews";
 
 const tours = await getTours();
+const reviews = await getReviews();
 const meta = {
   title: "Just Lisbon — Luxe privétours in Lissabon & Sintra",
   description:
@@ -23,7 +25,7 @@ const meta = {
   <Hero />
   <!-- <SignatureHighlights /> -->
   <TourShowcase tours={tours} />
-  <Testimonials />
+  <Testimonials reviews={reviews} />
   <AboutRenate />
   <Concierge />
   <Footer />
