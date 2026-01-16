@@ -10,10 +10,10 @@ const Footer: FC = () => {
         </div>
         <div className="flex flex-wrap gap-6">
           <a href="#tours" className="uppercase tracking-[0.3em] transition hover:text-accent">
-            Signature tours
+            Toers
           </a>
           <a href="#contact" className="uppercase tracking-[0.3em] transition hover:text-accent">
-            Concierge
+            Boek Een Toer
           </a>
         </div>
         <div className="space-y-1 text-right text-xs">

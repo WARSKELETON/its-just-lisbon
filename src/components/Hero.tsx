@@ -17,7 +17,7 @@ const Hero: FC = () => {
       <div className="mx-auto flex min-h-[90vh] max-w-4xl flex-col items-center justify-center px-6 py-32 text-center lg:px-8">
         <div className="space-y-10">
           <h1 className="font-display text-4xl leading-tight text-bone md:text-6xl md:leading-[1.05]">
-            Op maat gemaakte luxe tours in Lissabon &amp; Sintra voor de veeleisende reiziger.
+            Wilt u Lissabon &amp; Sintra op een unieke manier ontdekken?
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-bone/80 md:text-xl">
             Beleef de ziel van Portugal met een privéconciërge, selecteerde chauffeurs en exclusieve toegang tot locaties
@@ -28,13 +28,13 @@ const Hero: FC = () => {
               href="#tours"
               className="group inline-flex items-center justify-center rounded-full border border-transparent bg-accent px-8 py-3 text-sm font-semibold uppercase tracking-[0.28em] text-midnight transition hover:text-midnight hover:bg-champagne"
             >
-              Ontdek tours
+              Toon Mij Alle Toers
             </a>
           </div>
           <dl className="grid gap-6 text-sm uppercase tracking-[0.3em] text-bone/60 sm:grid-cols-3">
             <div>
               <dt className="text-bone/50">Sinds</dt>
-              <dd className="mt-2 text-2xl font-semibold text-bone">2012</dd>
+              <dd className="mt-2 text-2xl font-semibold text-bone">2014</dd>
             </div>
             <div>
               <dt className="text-bone/50">Ervaren hosts</dt>
