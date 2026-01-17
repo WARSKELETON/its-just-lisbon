@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Navigation from "../components/Navigation";
 import Hero from "../components/Hero";
-import SignatureHighlights from "../components/SignatureHighlights";
 import TourShowcase from "../components/TourShowcase";
 import Testimonials from "../components/Testimonials";
 import Faq from "../components/Faq.astro";
@@ -18,9 +17,8 @@ const tours = await getTours();
 const reviews = await getReviews();
 const faqs = await getFaqs();
 const meta = {
-  title: "Just Lisbon — Luxe privétours in Lissabon & Sintra",
-  description:
-    "Curated high-end privétours en experiences voor Nederlandse reizigers in Lissabon, Sintra en Cascais.",
+  title: "Nederlandse gids in Lissabon & Sintra — Privé tours | Just Lisbon",
+  description: "Lissabon & Sintra ontdekken met een lokale Nederlandse gids.",
 };
 const faqJsonLd: WithContext<FAQPage> = {
   "@context": "https://schema.org",

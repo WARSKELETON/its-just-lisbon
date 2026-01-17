@@ -23,10 +23,10 @@ const { faqs } = Astro.props as { faqs: Faq[] };
     <div class="mt-16 grid gap-6">
       {
         faqs.map((faq) => (
-          <details class="group rounded-3xl border border-bone/10 bg-slate/25 p-8 text-sm text-bone/70 backdrop-blur-md transition hover:border-accent/40">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-xl text-bone">
+          <details class="group rounded-3xl border border-bone/10 bg-slate/25 text-sm text-bone/70 backdrop-blur-md transition hover:border-accent/40">
+            <summary class="flex w-full cursor-pointer list-none items-center justify-between gap-6 p-8 font-display text-xl text-bone">
               <span>{faq.question}</span>
-              <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-bone/30 text-bone/60 transition group-open:border-accent/50 group-open:text-accent">
+              <span class="inline-flex h-8 w-8 items-center justify-center text-bone/60 transition group-open:border-accent/50 group-open:text-accent">
                 <span class="block group-open:hidden" aria-hidden="true">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ const { faqs } = Astro.props as { faqs: Faq[] };
                 </span>
               </span>
             </summary>
-            <div class="mt-4 text-bone/70">
+            <div class="px-8 pb-8 text-bone/70">
               <p>{faq.answer}</p>
             </div>
           </details>

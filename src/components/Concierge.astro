@@ -476,6 +476,19 @@ const countries = countryCodes
 
   let currentStep = 1;
 
+  const queryParams = new URLSearchParams(window.location.search);
+  const requestedTour = queryParams.get("tour");
+
+  if (requestedTour) {
+    const matchingOption = Array.from(tourSelect.options).find(
+      (option) => option.value === requestedTour,
+    );
+
+    if (matchingOption) {
+      tourSelect.value = matchingOption.value;
+    }
+  }
+
   // Validation helpers
   function showError(element: HTMLElement, message: string = "") {
     const errorSpan = element

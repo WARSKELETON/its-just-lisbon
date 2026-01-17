@@ -80,8 +80,11 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
                       <a href={`/tours/${tour.bookName}`} className="text-bone/60 transition hover:text-champagne">
                         Bekijk details
                       </a>
-                      <a href="#contact" className="text-accent transition hover:text-champagne">
-                        {tour.toBook ? 'Reserveer nu' : 'Informeer naar opties'}
+                      <a
+                        href={`/?tour=${encodeURIComponent(tour.name)}#contact`}
+                        className="text-accent transition hover:text-champagne"
+                      >
+                        {tour.toBook ? 'Boek nu' : 'Informeer naar opties'}
                       </a>
                     </div>
                   </div>
