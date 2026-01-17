@@ -1,35 +1,99 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
+import type { Thing, TravelAgency, WithContext } from "schema-dts";
+import defaultOgImage from "../images/hero-centered.jpg";
+import logo from "../images/logo.png";
+
+type StructuredData = WithContext<Thing>;
 
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  ogType?: string;
+  jsonLd?: StructuredData | StructuredData[];
 }
 
 const {
-  title = 'Just Lisbon — Luxe privétours in Lissabon & Sintra',
-  description = 'Just Lisbon creëert high-end tours en experiences in Lissabon en Sintra voor veeleisende Nederlandse reizigers.'
+  title = "Just Lisbon — Luxe privétours in Lissabon & Sintra",
+  description = "Just Lisbon creëert high-end tours en experiences in Lissabon en Sintra voor veeleisende Nederlandse reizigers.",
+  canonical,
+  image,
+  imageAlt = "Just Lisbon — Luxe privétours in Lissabon & Sintra",
+  ogType = "website",
+  jsonLd,
 } = Astro.props as Props;
+
+const siteUrl = Astro.site;
+const canonicalUrl =
+  canonical ??
+  (siteUrl ? new URL(Astro.url.pathname, siteUrl).href : undefined);
+const resolvedImage = image ?? defaultOgImage.src;
+const ogImageUrl = siteUrl
+  ? new URL(resolvedImage, siteUrl).href
+  : resolvedImage;
+const logoUrl = siteUrl ? new URL(logo.src, siteUrl).href : logo.src;
+
+const organizationJsonLd: WithContext<TravelAgency> = {
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  name: "Just Lisbon",
+  url: siteUrl ? siteUrl.href : "https://www.just-lisbon.com",
+  logo: logoUrl,
+  email: "concierge@justlisbon.pt",
+  telephone: "+351 912 345 678",
+  areaServed: ["Lissabon", "Sintra", "Cascais"],
+};
+
+const pageJsonLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+const structuredData: StructuredData[] = [organizationJsonLd, ...pageJsonLd];
 ---
+
 <html lang="nl" class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="keywords"
+      content="lissabon,gids,nederlandse,wandeling,sintra,nederlandstalige,tour,guids,guide,wandel,dutch,portugese,portugal,vakantie"
+    />
     <title>{title}</title>
+    {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <link rel="icon" href="/favicon.svg" />
+    <meta property="og:type" content={ogType} />
+    {canonicalUrl ? <meta property="og:url" content={canonicalUrl} /> : null}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Just Lisbon" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {
+      structuredData.map((entry) => (
+        <script type="application/ld+json" set:html={JSON.stringify(entry)} />
+      ))
+    }
   </head>
   <body class="relative overflow-x-hidden">
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-slate/40" />
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-slate/40"
+    >
+    </div>
     <main class="relative">
       <slot />
     </main>

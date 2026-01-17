@@ -12,6 +12,7 @@ import Footer from "../components/Footer";
 import { getTours } from "../data/tours";
 import { getReviews } from "../data/reviews";
 import { getFaqs } from "../data/faqs";
+import type { FAQPage, WithContext } from "schema-dts";
 
 const tours = await getTours();
 const reviews = await getReviews();
@@ -21,9 +22,26 @@ const meta = {
   description:
     "Curated high-end privétours en experiences voor Nederlandse reizigers in Lissabon, Sintra en Cascais.",
 };
+const faqJsonLd: WithContext<FAQPage> = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
 ---
 
-<BaseLayout title={meta.title} description={meta.description}>
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  imageAlt="Luxe privétours in Lissabon en Sintra met Nederlandse gids"
+  jsonLd={faqJsonLd}
+>
   <Navigation variant="hero" />
   <Hero />
   <!-- <SignatureHighlights /> -->

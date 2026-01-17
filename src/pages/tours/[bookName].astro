@@ -7,6 +7,7 @@ import TourHighlights from "../../components/TourHighlights.astro";
 import TourPhotoGallery from "../../components/TourPhotoGallery.astro";
 import { getTours } from "../../data/tours";
 import type { Tour } from "../../types/tour";
+import type { ItemList, TouristTrip, WithContext } from "schema-dts";
 
 export async function getStaticPaths() {
   const tours = await getTours();
@@ -26,6 +27,61 @@ if (!tour) {
 const fallbackImage =
   "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070";
 const heroImage = tour.images[0]?.original || fallbackImage;
+const locationLabel = tour.location === "lisbon" ? "Lissabon" : "Sintra";
+const canonicalUrl = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : undefined;
+
+const parsePrice = (value: string): number | null => {
+  const match = value.match(/([0-9]+(?:[.,][0-9]{2})?)/);
+  if (!match) {
+    return null;
+  }
+
+  const normalized = match[1].replace(".", "").replace(",", ".");
+  const numeric = Number.parseFloat(normalized);
+  return Number.isFinite(numeric) ? numeric : null;
+};
+
+const numericPrice = parsePrice(tour.price);
+const itinerary: ItemList | undefined = tour.landmarks.length
+  ? {
+      "@type": "ItemList",
+      itemListElement: tour.landmarks.map((landmark, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Place",
+          name: landmark,
+        },
+      })),
+    }
+  : undefined;
+
+const tourJsonLd: WithContext<TouristTrip> = {
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  name: tour.name,
+  description: tour.description,
+  image: heroImage,
+  provider: {
+    "@type": "TravelAgency",
+    name: "Just Lisbon",
+    url: "https://www.just-lisbon.com",
+  },
+  ...(canonicalUrl ? { url: canonicalUrl } : {}),
+  ...(itinerary ? { itinerary } : {}),
+  ...(numericPrice
+    ? {
+        offers: {
+          "@type": "Offer",
+          price: numericPrice,
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        },
+      }
+    : {}),
+};
 
 const meta = {
   title: `${tour.name} — Just Lisbon`,
@@ -33,7 +89,13 @@ const meta = {
 };
 ---
 
-<BaseLayout title={meta.title} description={meta.description}>
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  image={heroImage}
+  imageAlt={`${tour.name} — Nederlandse gids in ${locationLabel}`}
+  jsonLd={tourJsonLd}
+>
   <Navigation />
   <article class="relative md:pt-10">
     <section class="relative isolate overflow-hidden border-b border-bone/10">
@@ -42,7 +104,9 @@ const meta = {
           src={heroImage}
           alt={tour.name}
           class="h-full w-full object-cover object-center"
-          loading="lazy"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
         />
       </div>
       <div
@@ -57,7 +121,7 @@ const meta = {
             <span
               class="rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone/80"
             >
-              {tour.location === "lisbon" ? "Lissabon" : "Sintra"}
+              {locationLabel}
             </span>
           </div>
           <div class="space-y-6">
@@ -95,6 +159,7 @@ const meta = {
           <TourPhotoGallery
             images={tour.images}
             fallbackImage={fallbackImage}
+            tourName={tour.name}
           />
         </div>
 

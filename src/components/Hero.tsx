@@ -11,7 +11,9 @@ const Hero: FC = () => {
         alt=""
         aria-hidden="true"
         className="absolute inset-0 -z-10 h-full w-full object-cover"
-        loading="lazy"
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
       <div className="mx-auto flex min-h-[90vh] max-w-4xl flex-col items-center justify-center px-6 py-32 text-center lg:px-8">
