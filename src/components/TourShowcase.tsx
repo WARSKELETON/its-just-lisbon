@@ -18,12 +18,14 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.4em] text-bone/40">Signature tours</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-bone/40">Wandel keuzes</p>
             <h2 className="mt-6 font-display text-3xl text-bone md:text-4xl">
-              De essentie van Lissabon &amp; Sintra in negen zorgvuldig samengestelde ervaringen.
+              Ervaar de sfeer van Lissabon en Sintra te voet
             </h2>
             <p className="mt-4 text-sm text-bone/70">
-              Combineer wandelingen door volksbuurten en culinaire hotspots met exclusieve Sintra-landgoederen. Onze selectie is ontworpen voor kleine gezelschappen die Nederlandstalige begeleiding waarderen.
+              Onze selectie van Nederlandstalige wandelingen is met zorg samengesteld voor kleine
+              gezelschappen, waarbij we eeuwenoude straatjes combineren met culinaire lekkernijen en een prachtige
+              natuur.
             </p>
           </div>
         </div>

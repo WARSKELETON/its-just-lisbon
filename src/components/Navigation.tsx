@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import logo from '../images/logo.png';
 
 interface NavigationProps {
   variant?: 'default' | 'hero';
@@ -15,6 +16,13 @@ const Navigation: FC<NavigationProps> = ({ variant = 'default' }) => {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8">
         <a href="/" className="font-display text-xl text-bone">
           Just Lisbon
+          {/* <img
+            src={logo.src}
+            width={logo.width}
+            height={logo.height}
+            alt="Just Lisbon"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          /> */}
         </a>
         <div className="hidden items-center gap-8 text-[0.7rem] uppercase tracking-[0.35em] text-bone/60 md:flex">
           <a href="/#tours" className="transition hover:text-accent">
