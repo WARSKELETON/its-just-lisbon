@@ -1,4 +1,9 @@
-import type { Offer, Product, WithContext } from 'schema-dts';
+import type {
+  Offer,
+  Product,
+  WithContext,
+  ItemAvailability,
+} from 'schema-dts';
 import type { Tour } from '../../types/tour';
 import { buildOrganizationData } from './organization';
 import { parsePrice, toAbsoluteUrl } from './tourUtils';
@@ -6,7 +11,7 @@ import { parsePrice, toAbsoluteUrl } from './tourUtils';
 type TourProductOptions = {
   siteUrl?: URL;
   priceCurrency?: string;
-  availability?: string;
+  availability?: ItemAvailability;
 };
 
 export const buildTourProductJsonLd = (
@@ -25,15 +30,15 @@ export const buildTourProductJsonLd = (
   const offers: Offer | undefined =
     numericPrice !== null
       ? {
-          '@type': 'Offer',
-          ...(tourUrl ? { url: tourUrl } : {}),
-          priceCurrency,
-          price: numericPrice,
-          availability,
-        }
+        '@type': 'Offer',
+        ...(tourUrl ? { url: tourUrl } : {}),
+        priceCurrency,
+        price: numericPrice,
+        availability,
+      }
       : undefined;
-  const relatedTour = tourId
-    ? ({ '@id': tourId } as Product['isRelatedTo'])
+  const relatedTour: Product['isRelatedTo'] | undefined = tourId
+    ? { '@id': tourId }
     : undefined;
 
   return {
@@ -44,6 +49,7 @@ export const buildTourProductJsonLd = (
     description: tour.description,
     ...(tourUrl ? { url: tourUrl } : {}),
     brand: buildOrganizationData({ siteUrl }),
+    image: tour.images[0]?.original,
     ...(offers ? { offers } : {}),
     ...(relatedTour ? { isRelatedTo: relatedTour } : {}),
   };

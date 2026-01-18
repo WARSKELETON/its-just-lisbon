@@ -1,4 +1,10 @@
-import type { ItemList, TouristTrip, WithContext } from 'schema-dts';
+import type {
+  ItemList,
+  TouristTrip,
+  WithContext,
+  ItemAvailability,
+  Offer,
+} from 'schema-dts';
 import type { Tour } from '../../types/tour';
 import { buildOrganizationData } from './organization';
 import { parsePrice, toAbsoluteUrl } from './tourUtils';
@@ -8,22 +14,22 @@ type TouristTripOptions = {
   heroImage?: string;
   url?: string;
   priceCurrency?: string;
-  availability?: string;
+  availability?: ItemAvailability;
 };
 
 const buildItinerary = (landmarks: string[]): ItemList | undefined =>
   landmarks.length
     ? {
-        '@type': 'ItemList',
-        itemListElement: landmarks.map((landmark, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          item: {
-            '@type': 'Place',
-            name: landmark,
-          },
-        })),
-      }
+      '@type': 'ItemList',
+      itemListElement: landmarks.map((landmark, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Place',
+          name: landmark,
+        },
+      })),
+    }
     : undefined;
 
 export const buildTouristTripJsonLd = (
@@ -44,6 +50,17 @@ export const buildTouristTripJsonLd = (
   const resolvedImage =
     heroImage ? toAbsoluteUrl(siteUrl, heroImage) ?? heroImage : undefined;
 
+  const offers: Offer | undefined =
+    numericPrice !== null
+      ? {
+        '@type': 'Offer',
+        price: numericPrice,
+        priceCurrency,
+        availability,
+        ...(tourUrl ? { url: tourUrl } : {}),
+      }
+      : undefined;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'TouristTrip',
@@ -54,15 +71,6 @@ export const buildTouristTripJsonLd = (
     provider: buildOrganizationData({ siteUrl }),
     ...(tourUrl ? { url: tourUrl } : {}),
     ...(itinerary ? { itinerary } : {}),
-    ...(numericPrice !== null
-      ? {
-          offers: {
-            '@type': 'Offer',
-            price: numericPrice,
-            priceCurrency,
-            availability,
-          },
-        }
-      : {}),
+    ...(offers ? { offers } : {}),
   };
 };

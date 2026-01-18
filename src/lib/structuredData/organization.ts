@@ -5,20 +5,9 @@ type OrganizationOptions = {
   logoUrl?: string;
 };
 
-type OrganizationData = {
-  '@type': 'TravelAgency';
-  '@id'?: string;
-  name: string;
-  url: string;
-  logo?: string;
-  email: string;
-  telephone: string;
-  areaServed: string[];
-};
-
 export const buildOrganizationData = (
   options: OrganizationOptions = {}
-): OrganizationData => {
+): TravelAgency & object => {
   const { siteUrl, logoUrl } = options;
 
   return {
@@ -27,10 +16,13 @@ export const buildOrganizationData = (
     name: 'Just Lisbon',
     url: siteUrl?.href ?? 'https://www.just-lisbon.com',
     logo: logoUrl,
-    email: 'concierge@justlisbon.pt',
-    telephone: '+351 912 345 678',
+    email: 'renatevicente@gmail.com',
     areaServed: ['Lisboa', 'Sintra'],
-  } satisfies TravelAgency;
+    address: {
+      "@type": "PostalAddress",
+      "addressLocality": "Lisboa",
+    }
+  };
 };
 
 export const buildOrganizationJsonLd = (

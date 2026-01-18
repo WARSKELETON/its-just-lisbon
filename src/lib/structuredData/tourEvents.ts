@@ -1,4 +1,4 @@
-import type { Event, WithContext } from 'schema-dts';
+import type { Event, Offer, WithContext } from 'schema-dts';
 import type { Tour } from '../../types/tour';
 import {
   DEFAULT_TOUR_IMAGE,
@@ -35,13 +35,14 @@ export const buildTourEventItem = (
     .map((image) => toAbsoluteUrl(siteUrl, image.original))
     .filter((image): image is string => Boolean(image));
   const numericPrice = parsePrice(tour.price);
-  const offers =
+  const offers: Offer | undefined =
     numericPrice !== null
       ? {
-          '@type': 'Offer',
-          price: numericPrice,
-          priceCurrency: 'EUR',
-        }
+        '@type': 'Offer',
+        price: numericPrice,
+        priceCurrency: 'EUR',
+        url
+      }
       : undefined;
 
   return {
