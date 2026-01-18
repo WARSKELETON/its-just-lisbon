@@ -11,7 +11,8 @@ import Footer from "../components/Footer";
 import { getTours } from "../data/tours";
 import { getReviews } from "../data/reviews";
 import { getFaqs } from "../data/faqs";
-import type { FAQPage, WithContext } from "schema-dts";
+import { buildFaqJsonLd } from "../lib/structuredData/faq";
+import { buildTourListJsonLd } from "../lib/structuredData/tourList";
 
 const tours = await getTours();
 const reviews = await getReviews();
@@ -20,25 +21,15 @@ const meta = {
   title: "Nederlandse gids in Lissabon & Sintra — Privé tours | Just Lisbon",
   description: "Lissabon & Sintra ontdekken met een lokale Nederlandse gids.",
 };
-const faqJsonLd: WithContext<FAQPage> = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.answer,
-    },
-  })),
-};
+const faqJsonLd = buildFaqJsonLd(faqs);
+const tourListJsonLd = buildTourListJsonLd(tours, { siteUrl: Astro.site });
 ---
 
 <BaseLayout
   title={meta.title}
   description={meta.description}
   imageAlt="Luxe privétours in Lissabon en Sintra met Nederlandse gids"
-  jsonLd={faqJsonLd}
+  jsonLd={[faqJsonLd, tourListJsonLd]}
 >
   <Navigation variant="hero" />
   <Hero />

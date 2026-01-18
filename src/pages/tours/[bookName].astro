@@ -6,8 +6,10 @@ import Footer from "../../components/Footer";
 import TourHighlights from "../../components/TourHighlights.astro";
 import TourPhotoGallery from "../../components/TourPhotoGallery.astro";
 import { getTours } from "../../data/tours";
+import { buildTourEventJsonLd } from "../../lib/structuredData/tourEvents";
+import { buildTourProductJsonLd } from "../../lib/structuredData/tourProduct";
+import { buildTouristTripJsonLd } from "../../lib/structuredData/touristTrip";
 import type { Tour } from "../../types/tour";
-import type { ItemList, TouristTrip, WithContext } from "schema-dts";
 
 export async function getStaticPaths() {
   const tours = await getTours();
@@ -31,62 +33,18 @@ const locationLabel = tour.location === "lisbon" ? "Lissabon" : "Sintra";
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : undefined;
-
-const parsePrice = (value: string): number | null => {
-  const match = value.match(/([0-9]+(?:[.,][0-9]{2})?)/);
-  if (!match) {
-    return null;
-  }
-
-  const normalized = match[1].replace(".", "").replace(",", ".");
-  const numeric = Number.parseFloat(normalized);
-  return Number.isFinite(numeric) ? numeric : null;
-};
-
-const numericPrice = parsePrice(tour.price);
-const itinerary: ItemList | undefined = tour.landmarks.length
-  ? {
-      "@type": "ItemList",
-      itemListElement: tour.landmarks.map((landmark, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "Place",
-          name: landmark,
-        },
-      })),
-    }
-  : undefined;
-
-const tourJsonLd: WithContext<TouristTrip> = {
-  "@context": "https://schema.org",
-  "@type": "TouristTrip",
-  name: tour.name,
-  description: tour.description,
-  image: heroImage,
-  provider: {
-    "@type": "TravelAgency",
-    name: "Just Lisbon",
-    url: "https://www.just-lisbon.com",
-  },
-  ...(canonicalUrl ? { url: canonicalUrl } : {}),
-  ...(itinerary ? { itinerary } : {}),
-  ...(numericPrice
-    ? {
-        offers: {
-          "@type": "Offer",
-          price: numericPrice,
-          priceCurrency: "EUR",
-          availability: "https://schema.org/InStock",
-        },
-      }
-    : {}),
-};
+const tourJsonLd = buildTouristTripJsonLd(tour, {
+  siteUrl: Astro.site,
+  heroImage,
+  url: canonicalUrl,
+});
 
 const meta = {
   title: `${tour.name} met Nederlandse gids in ${locationLabel} | Just Lisbon`,
   description: tour.description,
 };
+const tourEventJsonLd = buildTourEventJsonLd(tour, { siteUrl: Astro.site });
+const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
 ---
 
 <BaseLayout
@@ -94,7 +52,7 @@ const meta = {
   description={meta.description}
   image={heroImage}
   imageAlt={`${tour.name} — Nederlandse gids in ${locationLabel}`}
-  jsonLd={tourJsonLd}
+  jsonLd={[tourJsonLd, tourEventJsonLd, tourProductJsonLd]}
 >
   <Navigation />
   <article class="relative md:pt-10">
