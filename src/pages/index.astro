@@ -16,7 +16,7 @@ import { buildTourListJsonLd } from "../lib/structuredData/tourList";
 
 const tours = await getTours();
 const reviews = await getReviews();
-const faqs = await getFaqs();
+const faqs = await getFaqs().then((faqs) => faqs.sort((a, b) => a.id - b.id));
 const meta = {
   title: "Nederlandse gids in Lissabon & Sintra — Privé tours | Just Lisbon",
   description: "Lissabon & Sintra ontdekken met een lokale Nederlandse gids.",
