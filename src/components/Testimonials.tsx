@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useEffect, useRef, useState, type FC } from 'react';
 import type { Review } from '../types/review';
 
 type TestimonialsProps = {
@@ -10,6 +10,51 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
     return null;
   }
 
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+
+    const updateControls = () => {
+      const maxScrollLeft = track.scrollWidth - track.clientWidth;
+      setCanScrollPrev(track.scrollLeft > 8);
+      setCanScrollNext(track.scrollLeft < maxScrollLeft - 8);
+    };
+
+    updateControls();
+
+    const handleScroll = () => updateControls();
+    const handleResize = () => updateControls();
+
+    track.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      track.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [reviews.length]);
+
+  const scrollByCard = (direction: -1 | 1) => {
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+
+    const firstCard = track.querySelector<HTMLElement>('[data-review-card]');
+    const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : track.clientWidth;
+    const styles = getComputedStyle(track);
+    const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
+    const delta = (cardWidth + gap) * direction;
+
+    track.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
   return (
     <section className="relative border-t border-bone/10 py-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
@@ -20,17 +65,26 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
             Onze gasten kiezen voor rust, discretie en authenticiteit. Hun woorden vertellen het verhaal beter dan wij ooit zouden kunnen.
           </p>
         </div>
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
+        <div
+          ref={trackRef}
+          id="reviews-carousel"
+          className="mt-10 flex items-start snap-x snap-mandatory gap-8 overflow-x-auto pb-6 pr-6 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="region"
+          aria-label="Ervaringen carousel"
+          aria-roledescription="carousel"
+          tabIndex={0}
+        >
           {reviews.map((item) => (
             <figure
               key={item.id}
-              className="flex h-full flex-col gap-6 rounded-3xl border border-bone/10 bg-slate/25 p-8 backdrop-blur-md transition hover:border-accent/50"
+              data-review-card
+              className="flex w-[85%] shrink-0 snap-start flex-col gap-6 rounded-3xl border border-bone/10 bg-slate/25 p-8 backdrop-blur-md transition hover:border-accent/50 sm:w-[65%] lg:w-[32%]"
             >
               <div className="flex items-center gap-4">
                 {item.avatar ? (
                   <img
                     src={item.avatar}
-                    alt={item.origin ? `${item.name} uit ${item.origin}` : item.name}
+                    alt={item.name}
                     className="h-16 w-16 rounded-full border border-bone/20 object-cover"
                     loading="lazy"
                   />
@@ -41,16 +95,30 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
                 )}
                 <div className="space-y-1">
                   <div className="font-semibold text-bone">{item.name}</div>
-                  {item.origin ? (
-                    <div className="text-xs uppercase tracking-[0.3em] text-bone/60">{item.origin}</div>
-                  ) : null}
                   {item.publishedAt ? (
                     <div className="text-[0.65rem] uppercase tracking-[0.28em] text-bone/40">{item.publishedAt}</div>
                   ) : null}
                 </div>
               </div>
               {item.content ? (
-                <blockquote className="flex-1 text-sm text-bone/75">“{item.content}”</blockquote>
+                <div className="flex flex-col gap-3">
+                  <input id={`review-${item.id}`} type="checkbox" className="peer sr-only" />
+                  <blockquote className="text-sm text-bone/75 overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] peer-checked:[-webkit-line-clamp:unset] peer-checked:[display:block] peer-checked:overflow-visible">
+                    “{item.content}”
+                  </blockquote>
+                  <label
+                    htmlFor={`review-${item.id}`}
+                    className="w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:hidden"
+                  >
+                    Lees meer
+                  </label>
+                  <label
+                    htmlFor={`review-${item.id}`}
+                    className="hidden w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:inline-flex"
+                  >
+                    Lees minder
+                  </label>
+                </div>
               ) : null}
               {item.tour ? (
                 <figcaption className="border-t border-bone/10 pt-6 text-xs uppercase tracking-[0.3em] text-bone/50">
@@ -59,6 +127,28 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
               ) : null}
             </figure>
           ))}
+        </div>
+        <div className="mt-12 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => scrollByCard(-1)}
+            disabled={!canScrollPrev}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-bone/20 text-bone/70 transition hover:border-accent/60 hover:text-bone disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label="Vorige review"
+            aria-controls="reviews-carousel"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByCard(1)}
+            disabled={!canScrollNext}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-bone/20 text-bone/70 transition hover:border-accent/60 hover:text-bone disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label="Volgende review"
+            aria-controls="reviews-carousel"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
     </section>

@@ -54,7 +54,7 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
   imageAlt={`${tour.name} — Nederlandse gids in ${locationLabel}`}
   jsonLd={[tourJsonLd, tourEventJsonLd, tourProductJsonLd]}
 >
-  <Navigation />
+  <Navigation client:load />
   <article class="relative md:pt-10">
     <section class="relative isolate overflow-hidden border-b border-bone/10">
       <div class="absolute inset-0">

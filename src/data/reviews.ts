@@ -33,7 +33,6 @@ const normalizeStory = (story: StoryblokStory, index: number): Review => {
   const avatar = readAsset(readField(content, ['avatar']));
   const publishedAt = formatPublishedAt(readField(content, ['published_at', 'publishedAt', 'date']));
   const tour = readString(readField(content, ['tour']));
-  const origin = readString(readField(content, ['origin']));
 
   return {
     id: typeof story.id === 'number' ? story.id : index + 1,
@@ -42,7 +41,6 @@ const normalizeStory = (story: StoryblokStory, index: number): Review => {
     avatar,
     publishedAt,
     tour,
-    origin,
   };
 };
 

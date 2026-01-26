@@ -31,11 +31,11 @@ const tourListJsonLd = buildTourListJsonLd(tours, { siteUrl: Astro.site });
   imageAlt="Luxe privétours in Lissabon en Sintra met Nederlandse gids"
   jsonLd={[faqJsonLd, tourListJsonLd]}
 >
-  <Navigation variant="hero" />
+  <Navigation variant="hero" client:load />
   <Hero />
   <!-- <SignatureHighlights /> -->
   <TourShowcase tours={tours} />
-  <Testimonials reviews={reviews} />
+  <Testimonials reviews={reviews} client:visible />
   <Faq faqs={faqs} />
   <AboutRenate />
   <Concierge />

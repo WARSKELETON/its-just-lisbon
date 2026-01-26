@@ -4,7 +4,6 @@ const fallbackReviews: Review[] = [
   {
     id: 1,
     name: 'Fam. de Jong',
-    origin: 'Amsterdam',
     content:
       'Onze host dacht werkelijk aan alles. De toegang tot Pena Palace voordat iemand anders binnen was, voelde magisch. Elke minuut was perfect getimed.',
     tour: '3 nachten — Lissabon & Sintra',
@@ -14,7 +13,6 @@ const fallbackReviews: Review[] = [
   {
     id: 2,
     name: 'Sophie & Bram',
-    origin: 'Rotterdam',
     content:
       'De persoonlijke aandacht van Just Lisbon is ongeëvenaard. Van privé-fado tot een helikoptertransfer naar Comporta: alles was naadloos geregeld.',
     tour: 'Weekend get-away',
@@ -24,7 +22,6 @@ const fallbackReviews: Review[] = [
   {
     id: 3,
     name: 'Marc & Lotte',
-    origin: 'Utrecht',
     content:
       'We wilden een culinaire reis en kregen een ervaring voor alle zintuigen. Het team stond 24/7 klaar, zonder ooit opdringerig te zijn.',
     tour: 'Gastronomische tour',

@@ -4,6 +4,5 @@ export type Review = {
   content: string;
   avatar: string;
   publishedAt: string;
-  origin?: string;
   tour?: string;
 };
