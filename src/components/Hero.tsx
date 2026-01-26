@@ -19,11 +19,13 @@ const Hero: FC = () => {
       <div className="mx-auto flex min-h-[90vh] max-w-4xl flex-col items-center justify-center px-6 py-32 text-center lg:px-8">
         <div className="space-y-10">
           <h1 className="font-display text-4xl leading-tight text-bone md:text-6xl md:leading-[1.05]">
-            Wilt u Lissabon &amp; Sintra op een unieke manier ontdekken?
+            Voor wie Lissabon &amp; Sintra op een unieke en gezellige manier wil ontdekken
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-bone/80 md:text-xl">
-            Beleef de ziel van Portugal met een privéconciërge, selecteerde chauffeurs en exclusieve toegang tot locaties
-            die normaal verborgen blijven voor het publiek.
+            Beleef de ziel van Portugal met een Nederlandse privé gids, waarbij je op ontspannen
+            wijze door de Portugese geschiedenis loopt, met her en der een verrassend verhaal, een prachtig
+            uitzichtpunt, insider tips en altijd een gezellig terras voor een drankje.
+            Met Just Lisbon bekijk je de stad met andere ogen
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -44,7 +46,7 @@ const Hero: FC = () => {
             </div>
             <div>
               <dt className="text-bone/50">Gastbeoordeling</dt>
-              <dd className="mt-2 text-2xl font-semibold text-bone">9.8/10</dd>
+              <dd className="mt-2 text-2xl font-semibold text-bone">Een topgids</dd>
             </div>
           </dl>
         </div>

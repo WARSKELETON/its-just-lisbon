@@ -59,10 +59,11 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
     <section className="relative border-t border-bone/10 py-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.4em] text-bone/40">Ervaringen</p>
-          <h2 className="mt-6 font-display text-3xl text-bone md:text-4xl">Verhalen van gasten die vertrouwen op onze lokale expertise.</h2>
+          <p className="text-xs uppercase tracking-[0.4em] text-bone/40">Beoordelingen</p>
+          <h2 className="mt-6 font-display text-3xl text-bone md:text-4xl">Ervaringen van gasten, die zich hebben laten verrassen door Just Lisbon</h2>
           <p className="mt-4 text-sm text-bone/70">
-            Onze gasten kiezen voor rust, discretie en authenticiteit. Hun woorden vertellen het verhaal beter dan wij ooit zouden kunnen.
+            Onze gasten kiezen voor verborgen pareltjes, ludieke verhalen en een ontspannen sfeer.
+            Hun woorden vertellen de ervaring beter dan wij ooit zouden kunnen.
           </p>
         </div>
         <div

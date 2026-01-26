@@ -39,14 +39,14 @@ const countries = countryCodes
   >
     <header class="max-w-3xl space-y-6">
       <p class="text-xs uppercase tracking-[0.4em] text-bone/40">
-        Travel concierge
+        Boekingsformulier
       </p>
       <h2 class="font-display text-4xl text-bone md:text-5xl">
-        Uw persoonlijke Lisbon curator staat klaar.
+        Je persoonlijke gids staat voor je klaar
       </h2>
       <p class="text-bone/70">
-        Deel uw reiswensen en wij ontwerpen een voorstel binnen 24 uur. Volledig
-        flexibel, met advies vanuit ons team in het hart van Lissabon.
+        Deel je gegevens en wandelwensen en ontvang binnen 24 uur een reactie
+        van ons.
       </p>
     </header>
 
@@ -210,7 +210,7 @@ const countries = countryCodes
             for="tour"
             class="text-xs uppercase tracking-[0.3em] text-bone/50"
           >
-            Interesse in tour
+            Wandelkeuze
           </label>
           <select
             id="tour"
@@ -220,7 +220,7 @@ const countries = countryCodes
             class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 pr-12 text-sm text-bone focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 appearance-none transition-all bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlPSIjZDRjNWIwIj48cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTE5IDlsLTcgNy03LTciPjwvcGF0aD48L3N2Zz4=')] bg-[length:1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
           >
             <option value="" disabled selected={!selectedTour}>
-              Kies uw favoriete ervaring
+              Kies je favoriete wandeling
             </option>
             {
               tours.map((tour) => (
@@ -273,7 +273,7 @@ const countries = countryCodes
             for="tijd"
             class="text-xs uppercase tracking-[0.3em] text-bone/50"
           >
-            Tijd voorkeur
+            Tijdsvoorkeur
           </label>
           <select
             id="tijd"
@@ -282,7 +282,7 @@ const countries = countryCodes
             aria-required="true"
             class="form-input rounded-2xl border border-bone/20 bg-midnight/80 px-5 py-4 pr-12 text-sm text-bone focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 appearance-none transition-all bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlPSIjZDRjNWIwIj48cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTE5IDlsLTcgNy03LTciPjwvcGF0aD48L3N2Zz4=')] bg-[length:1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
           >
-            <option value="" disabled selected>Selecteer uw voorkeur</option>
+            <option value="" disabled selected>Selecteer je voorkeur</option>
             <option value="Ochtend (9:00 - 12:00)"
               >Ochtend (9:00 - 12:00)</option
             >
