@@ -32,7 +32,7 @@ export const buildTourEventItem = (
 
   const url = toAbsoluteUrl(siteUrl, `/tours/${tour.bookName}`);
   const images = tour.images
-    .map((image) => toAbsoluteUrl(siteUrl, image.original))
+    .map((image) => toAbsoluteUrl(siteUrl, image))
     .filter((image): image is string => Boolean(image));
   const numericPrice = parsePrice(tour.price);
   const offers: Offer | undefined =

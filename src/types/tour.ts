@@ -8,8 +8,5 @@ export type Tour = {
   landmarks: string[];
   included: string[];
   price: string;
-  images: Array<{
-    original: string;
-    thumbnail: string;
-  }>;
+  images: string[];
 };

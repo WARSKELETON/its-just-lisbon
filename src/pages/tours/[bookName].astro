@@ -28,7 +28,7 @@ if (!tour) {
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070";
-const heroImage = tour.images[0]?.original || fallbackImage;
+const heroImage = tour.images[0] || fallbackImage;
 const locationLabel = tour.location === "lisbon" ? "Lissabon" : "Sintra";
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href

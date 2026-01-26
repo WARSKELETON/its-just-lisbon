@@ -49,7 +49,7 @@ export const buildTourProductJsonLd = (
     description: tour.description,
     ...(tourUrl ? { url: tourUrl } : {}),
     brand: buildOrganizationData({ siteUrl }),
-    image: tour.images[0]?.original,
+    image: tour.images[0],
     ...(offers ? { offers } : {}),
     ...(relatedTour ? { isRelatedTo: relatedTour } : {}),
   };

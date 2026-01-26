@@ -54,11 +54,10 @@ const toImages = (value: unknown): Tour['images'] => {
     }
 
     const image = entry as StoryblokAsset;
-
-    images.push({
-      original: image.filename ?? '',
-      thumbnail: image.filename ?? '',
-    });
+    const filename = image.filename ?? '';
+    if (filename) {
+      images.push(filename);
+    }
   }
 
   return images;
@@ -77,8 +76,6 @@ const normalizeStory = (story: StoryblokStory, index: number): Tour => {
     fallbackTours.find((tour) => tour.bookName === slug) ??
     fallbackTours[index] ??
     fallbackTours[0];
-
-  console.log(fallback);
 
   const name = readString(readField(content, ['name', 'title'])) || readString(story.name) || fallback.name;
   const description =

@@ -18,18 +18,9 @@ const staticTours: Tour[] = [
     included: ['Entréebewijs voor de Arco de Triumfo', 'Nederlandstalige begeleiding'],
     price: '€30,00 pp',
     images: [
-      {
-        original: 'img/alfama/1.jpg',
-        thumbnail: 'img/alfama/1.jpg'
-      },
-      {
-        original: 'img/alfama/2.jpg',
-        thumbnail: 'img/alfama/2.jpg'
-      },
-      {
-        original: 'img/alfama/3.jpg',
-        thumbnail: 'img/alfama/3.jpg'
-      }
+      'img/alfama/1.jpg',
+      'img/alfama/2.jpg',
+      'img/alfama/3.jpg'
     ],
   },
   {
@@ -54,18 +45,9 @@ const staticTours: Tour[] = [
     ],
     price: '€45,00 pp',
     images: [
-      {
-        original: 'img/culinaire/1.jpg',
-        thumbnail: 'img/culinaire/1.jpg'
-      },
-      {
-        original: 'img/culinaire/2.jpg',
-        thumbnail: 'img/culinaire/2.jpg'
-      },
-      {
-        original: 'img/culinaire/3.jpg',
-        thumbnail: 'img/culinaire/3.jpg'
-      }
+      'img/culinaire/1.jpg',
+      'img/culinaire/2.jpg',
+      'img/culinaire/3.jpg'
     ],
   },
   {
@@ -85,18 +67,9 @@ const staticTours: Tour[] = [
     included: ['Een consumptie (koffie of frisdrank)', 'Een pastel de nata', 'Nederlandstalige begeleiding'],
     price: '€30,00 pp',
     images: [
-      {
-        original: 'img/bohemian/1.jpg',
-        thumbnail: 'img/bohemian/1.jpg'
-      },
-      {
-        original: 'img/bohemian/2.jpg',
-        thumbnail: 'img/bohemian/2.jpg'
-      },
-      {
-        original: 'img/bohemian/3.jpg',
-        thumbnail: 'img/bohemian/3.jpg'
-      }
+      'img/bohemian/1.jpg',
+      'img/bohemian/2.jpg',
+      'img/bohemian/3.jpg'
     ],
   },
   {
@@ -116,18 +89,9 @@ const staticTours: Tour[] = [
     included: ['Fietshuur', 'Een consumptie', 'Nederlandstalige begeleiding'],
     price: '2-3 pers.: €60,00 pp\nvanaf 4 pers.: €45,00 pp',
     images: [
-      {
-        original: 'img/fietstoer/1.jpg',
-        thumbnail: 'img/fietstoer/1.jpg'
-      },
-      {
-        original: 'img/fietstoer/2.jpg',
-        thumbnail: 'img/fietstoer/2.jpg'
-      },
-      {
-        original: 'img/fietstoer/3.jpg',
-        thumbnail: 'img/fietstoer/3.jpg'
-      }
+      'img/fietstoer/1.jpg',
+      'img/fietstoer/2.jpg',
+      'img/fietstoer/3.jpg'
     ],
   },
   {
@@ -147,18 +111,9 @@ const staticTours: Tour[] = [
     included: ['Een tramkaartje', 'Een consumptie', 'Nederlandstalige begeleiding'],
     price: '€30,00 pp',
     images: [
-      {
-        original: 'img/tram/1.jpg',
-        thumbnail: 'img/tram/1.jpg'
-      },
-      {
-        original: 'img/tram/2.jpg',
-        thumbnail: 'img/tram/2.jpg'
-      },
-      {
-        original: 'img/tram/3.jpg',
-        thumbnail: 'img/tram/3.jpg'
-      }
+      'img/tram/1.jpg',
+      'img/tram/2.jpg',
+      'img/tram/3.jpg'
     ],
   },
   {
@@ -178,18 +133,9 @@ const staticTours: Tour[] = [
     included: ['Een consumptie', 'Nederlandstalige begeleiding'],
     price: '€30,00 pp',
     images: [
-      {
-        original: 'img/streetart/1.jpg',
-        thumbnail: 'img/streetart/1.jpg'
-      },
-      {
-        original: 'img/streetart/2.jpg',
-        thumbnail: 'img/streetart/2.jpg'
-      },
-      {
-        original: 'img/streetart/3.jpg',
-        thumbnail: 'img/streetart/3.jpg'
-      }
+      'img/streetart/1.jpg',
+      'img/streetart/2.jpg',
+      'img/streetart/3.jpg'
     ],
   },
   {
@@ -209,18 +155,9 @@ const staticTours: Tour[] = [
     included: ['Een consumptie', 'Nederlandstalige begeleiding'],
     price: '€35,00 pp',
     images: [
-      {
-        original: 'img/regaleira/1.jpg',
-        thumbnail: 'img/regaleira/1.jpg'
-      },
-      {
-        original: 'img/regaleira/2.jpg',
-        thumbnail: 'img/regaleira/2.jpg'
-      },
-      {
-        original: 'img/regaleira/3.jpg',
-        thumbnail: 'img/regaleira/3.jpg'
-      }
+      'img/regaleira/1.jpg',
+      'img/regaleira/2.jpg',
+      'img/regaleira/3.jpg'
     ],
   },
   {
@@ -240,18 +177,9 @@ const staticTours: Tour[] = [
     included: ['Pendelbus', 'Nederlandstalige begeleiding'],
     price: '€35,00 pp',
     images: [
-      {
-        original: 'img/mouros/1.jpg',
-        thumbnail: 'img/mouros/1.jpg'
-      },
-      {
-        original: 'img/mouros/2.jpg',
-        thumbnail: 'img/mouros/2.jpg'
-      },
-      {
-        original: 'img/mouros/3.jpg',
-        thumbnail: 'img/mouros/3.jpg'
-      }
+      'img/mouros/1.jpg',
+      'img/mouros/2.jpg',
+      'img/mouros/3.jpg'
     ],
   },
   {
@@ -271,18 +199,9 @@ const staticTours: Tour[] = [
     included: ['Pendelbus', 'Nederlandstalige begeleiding'],
     price: '€35,00 pp',
     images: [
-      {
-        original: 'img/pena/1.jpg',
-        thumbnail: 'img/pena/1.jpg'
-      },
-      {
-        original: 'img/pena/2.jpg',
-        thumbnail: 'img/pena/2.jpg'
-      },
-      {
-        original: 'img/pena/3.jpg',
-        thumbnail: 'img/pena/3.jpg'
-      }
+      'img/pena/1.jpg',
+      'img/pena/2.jpg',
+      'img/pena/3.jpg'
     ],
   },
   {
@@ -306,18 +225,9 @@ const staticTours: Tour[] = [
     ],
     price: '€59,95 pp',
     images: [
-      {
-        original: 'img/walkingdinner/1.jpg',
-        thumbnail: 'img/walkingdinner/1.jpg'
-      },
-      {
-        original: 'img/walkingdinner/2.jpg',
-        thumbnail: 'img/walkingdinner/2.jpg'
-      },
-      {
-        original: 'img/walkingdinner/3.jpg',
-        thumbnail: 'img/walkingdinner/3.jpg'
-      }
+      'img/walkingdinner/1.jpg',
+      'img/walkingdinner/2.jpg',
+      'img/walkingdinner/3.jpg'
     ],
   }
 ];

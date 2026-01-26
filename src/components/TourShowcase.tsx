@@ -45,7 +45,7 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
                 </a>
                 <div className="relative">
                   <img
-                    src={tour.images[0]?.original || DEFAULT_CARD_IMAGE}
+                    src={tour.images[0] || DEFAULT_CARD_IMAGE}
                     alt={`${tour.name} — ${locationLabels[tour.location]}`}
                     loading="lazy"
                     className="h-64 w-full object-cover"
