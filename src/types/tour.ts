@@ -1,6 +1,7 @@
 export type Tour = {
-  id: number;
+  uuid: string;
   name: string;
+  slug: string;
   bookName: string;
   location: 'lisbon' | 'sintra';
   toBook: boolean;

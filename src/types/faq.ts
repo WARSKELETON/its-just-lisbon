@@ -1,5 +1,5 @@
 export type Faq = {
-  id: number;
+  uuid: string;
   question: string;
   answer: string;
 };

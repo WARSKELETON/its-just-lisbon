@@ -2,9 +2,10 @@ import type { Tour } from '../types/tour';
 
 const staticTours: Tour[] = [
   {
-    id: 1,
+    uuid: '7dcca86e-1c6f-4e24-85a6-6aeff22e70f8',
     name: 'De Volksbuurten Wandeling',
     bookName: 'volksbuurten',
+    slug: 'volksbuurten',
     location: 'lisbon',
     toBook: true,
     description:
@@ -24,9 +25,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 2,
+    uuid: '6ca3be58-d05a-48ff-94e1-648f08b7bee3',
     name: 'De Tapas Wandeling',
     bookName: 'tapas',
+    slug: 'tapas',
     location: 'lisbon',
     toBook: true,
     description:
@@ -51,9 +53,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 3,
+    uuid: '9b76fc60-79d6-46dc-9e17-e5160ab109ca',
     name: 'De Bohemian Wandeling',
     bookName: 'bohemian',
+    slug: 'bohemian',
     location: 'lisbon',
     toBook: true,
     description:
@@ -73,9 +76,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 4,
+    uuid: 'fb502a98-06ed-45a8-9134-20fbea24339e',
     name: 'Een privé Fietstoer',
     bookName: 'fietstoer',
+    slug: 'fietstoer',
     location: 'lisbon',
     toBook: true,
     description:
@@ -95,9 +99,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 7,
+    uuid: '55971b73-35e2-4b65-bfab-6d4290394a0f',
     name: 'De Tram Wandeling',
     bookName: 'tram',
+    slug: 'tram',
     location: 'lisbon',
     toBook: true,
     description:
@@ -117,9 +122,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 9,
+    uuid: '1bef3531-d7dd-4fdf-8e5a-c6d34d82de24',
     name: 'De Streetart Wandeling',
     bookName: 'streetart',
+    slug: 'streetart',
     location: 'lisbon',
     toBook: true,
     description:
@@ -139,9 +145,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 5,
+    uuid: '18ccda80-75e9-41f6-8d7d-5daa5e29818a',
     name: 'De Regaleira Wandeling',
     bookName: 'regaleira',
+    slug: 'regaleira',
     location: 'sintra',
     toBook: true,
     description:
@@ -161,9 +168,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 6,
+    uuid: 'c586027f-e029-4b58-b00e-3565076c26a3',
     name: 'De Mouros Wandeling',
     bookName: 'mouros',
+    slug: 'mouros',
     location: 'sintra',
     toBook: true,
     description:
@@ -183,9 +191,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 8,
+    uuid: '11e3b3be-65b6-46cc-a74f-e976fa8b564f',
     name: 'De Pena Wandeling',
     bookName: 'pena',
+    slug: 'pena',
     location: 'sintra',
     toBook: true,
     description:
@@ -205,9 +214,10 @@ const staticTours: Tour[] = [
     ],
   },
   {
-    id: 10,
+    uuid: 'baddc3be-d266-4346-a546-4426d805a7c6',
     name: 'Walking Dinner',
     bookName: 'walkingdinner',
+    slug: 'walkingdinner',
     location: 'lisbon',
     toBook: false,
     description:

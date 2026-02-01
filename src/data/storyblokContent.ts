@@ -1,5 +1,6 @@
 type StoryblokStory = {
   id?: number;
+  uuid?: string;
   name?: string;
   slug?: string;
   content?: Record<string, unknown>;

@@ -7,9 +7,10 @@ const normalizeStory = (story: StoryblokStory, index: number): Faq => {
   const content = (story.content ?? {}) as Record<string, unknown>;
   const question = readString(readField(content, ['question', 'title'])) || readString(story.name);
   const answer = readString(readField(content, ['answer', 'content', 'body']));
+  const uuid = readString(story.uuid) || `faq-${index + 1}`;
 
   return {
-    id: typeof story.id === 'number' ? story.id : index + 1,
+    uuid,
     question,
     answer,
   };

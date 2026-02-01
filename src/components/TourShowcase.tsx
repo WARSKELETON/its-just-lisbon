@@ -33,11 +33,11 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
           {tours.map((tour) => {
             return (
               <article
-                key={tour.id}
+                key={tour.uuid}
                 className="group relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-bone/10 bg-slate/30 transition hover:border-accent/60 hover:shadow-glow"
               >
                 <a
-                  href={`/tours/${tour.bookName}`}
+                  href={`/tours/${tour.slug}`}
                   className="absolute inset-0 z-10 rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
                   aria-label={`Bekijk details over ${tour.name}`}
                 >
@@ -77,7 +77,7 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
                   <div className="relative z-20 mt-auto flex flex-col gap-4 border-t border-bone/10 pt-6 text-sm">
                     <span className="font-semibold text-bone whitespace-pre-line">{tour.price}</span>
                     <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.3em]">
-                      <a href={`/tours/${tour.bookName}`} className="text-bone/60 transition hover:text-champagne">
+                      <a href={`/tours/${tour.slug}`} className="text-bone/60 transition hover:text-champagne">
                         Bekijk details
                       </a>
                       <a

@@ -65,15 +65,16 @@ const toImages = (value: unknown): Tour['images'] => {
 
 const normalizeStory = (story: StoryblokStory, index: number): Tour => {
   const content = (story.content ?? {}) as Record<string, unknown>;
-  const slug = readString(story.slug);
+  const storySlug = readString(story.slug);
   const explicitBookName = readString(
-    readField(content, ['bookName', 'book_name', 'slug'])
+    readField(content, ['bookName', 'book_name'])
   );
-  const bookName = explicitBookName || slug || `tour-${story.id ?? index + 1}`;
+  const bookName = explicitBookName || storySlug || `tour-${index + 1}`;
+  const slug = storySlug || bookName;
 
   const fallback =
     fallbackTours.find((tour) => tour.bookName === bookName) ??
-    fallbackTours.find((tour) => tour.bookName === slug) ??
+    fallbackTours.find((tour) => tour.slug === slug) ??
     fallbackTours[index] ??
     fallbackTours[0];
 
@@ -93,10 +94,12 @@ const normalizeStory = (story: StoryblokStory, index: number): Tour => {
   const included = toStringArray(readField(content, ['included', 'inclusions']));
   const landmarks = toStringArray(readField(content, ['landmarks', 'highlights']));
   const images = toImages(readField(content, ['images', 'gallery', 'media']));
+  const uuid = readString(story.uuid) || fallback.uuid || slug;
 
   return {
-    id: typeof story.id === 'number' ? story.id : fallback.id,
+    uuid,
     name,
+    slug,
     bookName,
     location,
     toBook,
@@ -134,7 +137,7 @@ const fetchToursFromStoryblok = async (): Promise<Tour[] | null> => {
 
     stories.forEach((story, index) => {
       const tour = normalizeStory(story, index);
-      deduped.set(tour.bookName, tour);
+      deduped.set(tour.slug, tour);
     });
 
     return Array.from(deduped.values()).sort((a, _b) => a.location === 'lisbon' ? -1 : 1);

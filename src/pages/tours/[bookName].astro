@@ -15,7 +15,7 @@ export async function getStaticPaths() {
   const tours = await getTours();
 
   return tours.map((tour) => ({
-    params: { bookName: tour.bookName },
+    params: { bookName: tour.slug },
     props: { tour },
   }));
 }

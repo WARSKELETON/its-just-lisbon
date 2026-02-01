@@ -30,7 +30,7 @@ export const buildTourEventItem = (
     toAbsoluteUrl(siteUrl, fallbackImage) ?? fallbackImage;
   const startDate = options.startDate ?? new Date().toISOString();
 
-  const url = toAbsoluteUrl(siteUrl, `/tours/${tour.bookName}`);
+  const url = toAbsoluteUrl(siteUrl, `/tours/${tour.slug}`);
   const images = tour.images
     .map((image) => toAbsoluteUrl(siteUrl, image))
     .filter((image): image is string => Boolean(image));

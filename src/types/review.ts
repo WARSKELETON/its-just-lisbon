@@ -1,5 +1,5 @@
 export type Review = {
-  id: number;
+  uuid: string;
   name: string;
   content: string;
   avatar: string;

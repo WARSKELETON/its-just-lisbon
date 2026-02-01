@@ -77,7 +77,7 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
         >
           {reviews.map((item) => (
             <figure
-              key={item.id}
+              key={item.uuid}
               data-review-card
               className="flex w-[85%] shrink-0 snap-start flex-col gap-6 rounded-3xl border border-bone/10 bg-slate/25 p-8 backdrop-blur-md transition hover:border-accent/50 sm:w-[65%] lg:w-[32%]"
             >
@@ -103,18 +103,18 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
               </div>
               {item.content ? (
                 <div className="flex flex-col gap-3">
-                  <input id={`review-${item.id}`} type="checkbox" className="peer sr-only" />
+                  <input id={`review-${item.uuid}`} type="checkbox" className="peer sr-only" />
                   <blockquote className="text-sm text-bone/75 overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] peer-checked:[-webkit-line-clamp:unset] peer-checked:[display:block] peer-checked:overflow-visible">
                     “{item.content}”
                   </blockquote>
                   <label
-                    htmlFor={`review-${item.id}`}
+                    htmlFor={`review-${item.uuid}`}
                     className="w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:hidden"
                   >
                     Lees meer
                   </label>
                   <label
-                    htmlFor={`review-${item.id}`}
+                    htmlFor={`review-${item.uuid}`}
                     className="hidden w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:inline-flex"
                   >
                     Lees minder
