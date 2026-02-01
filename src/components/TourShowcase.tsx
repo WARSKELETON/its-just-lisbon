@@ -69,7 +69,7 @@ const TourShowcase: FC<TourShowcaseProps> = ({ tours }) => {
                   <ul className="space-y-3 text-sm text-bone/70">
                     {tour.included.map((item) => (
                       <li key={item} className="flex items-start gap-3">
-                        <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-accent/80" />
+                        <span className="mt-1.5 inline-flex size-1.5 rounded-full bg-accent/80" />
                         <span>{item}</span>
                       </li>
                     ))}

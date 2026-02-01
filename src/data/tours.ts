@@ -137,7 +137,7 @@ const fetchToursFromStoryblok = async (): Promise<Tour[] | null> => {
       deduped.set(tour.bookName, tour);
     });
 
-    return Array.from(deduped.values());
+    return Array.from(deduped.values()).sort((a, _b) => a.location === 'lisbon' ? -1 : 1);
   } catch (error) {
     console.warn('Storyblok request for tours failed.', error);
     return null;
