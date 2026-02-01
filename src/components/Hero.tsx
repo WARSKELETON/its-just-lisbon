@@ -35,18 +35,14 @@ const Hero: FC = () => {
               Toon Mij Alle Toers
             </a>
           </div>
-          <dl className="grid gap-6 text-sm uppercase tracking-[0.3em] text-bone/60 sm:grid-cols-3">
+          <dl className="flex flex-col sm:flex-row gap-10 justify-evenly text-sm uppercase tracking-[0.3em] text-bone/60">
             <div>
               <dt className="text-bone/50">Sinds</dt>
               <dd className="mt-2 text-2xl font-semibold text-bone">2014</dd>
             </div>
             <div>
-              <dt className="text-bone/50">Ervaren hosts</dt>
-              <dd className="mt-2 text-2xl font-semibold text-bone">14</dd>
-            </div>
-            <div>
               <dt className="text-bone/50">Gastbeoordeling</dt>
-              <dd className="mt-2 text-2xl font-semibold text-bone">Een topgids</dd>
+              <dd className="mt-2 text-xl font-semibold text-bone">Een topgids</dd>
             </div>
           </dl>
         </div>
