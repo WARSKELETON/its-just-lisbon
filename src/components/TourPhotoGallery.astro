@@ -20,13 +20,20 @@ const {
 } = Astro.props;
 
 const containerClass = ["space-y-4", className].filter(Boolean).join(" ");
+const galleryId = `tour-gallery-${Math.random().toString(36).slice(2, 9)}`;
 
 if (!images || images.length === 0) {
     return null;
 }
+
+const resolvedImages = images.map((image) => image || fallbackImage);
 ---
 
-<section class={containerClass}>
+<section
+    class={containerClass}
+    data-gallery-root={galleryId}
+    data-images={JSON.stringify(resolvedImages)}
+>
     <header class="space-y-2">
         <p class="text-xs uppercase tracking-[0.35em] text-bone/40">
             {subtitle}
@@ -35,20 +42,302 @@ if (!images || images.length === 0) {
     </header>
     <div class="grid gap-4 sm:grid-cols-2">
         {
-            images.map((image) => (
+            resolvedImages.map((image, index) => (
                 <figure class="group overflow-hidden rounded-3xl border border-bone/10 bg-slate/20 transition hover:border-accent/60 hover:shadow-glow">
-                    <img
-                        src={image || fallbackImage}
-                        alt={
-                            tourName
-                                ? `${tourName} — sfeerbeeld`
-                                : "Sfeerbeeld van de ervaring"
-                        }
-                        class="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-105"
-                        loading="lazy"
-                    />
+                    <button
+                        type="button"
+                        class="block w-full"
+                        data-gallery-thumb
+                        data-index={index}
+                        aria-label="Open foto in fullscreen"
+                    >
+                        <img
+                            src={image}
+                            alt={
+                                tourName
+                                    ? `${tourName} — sfeerbeeld`
+                                    : "Sfeerbeeld van de ervaring"
+                            }
+                            class="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-105"
+                            loading="lazy"
+                        />
+                    </button>
                 </figure>
             ))
         }
     </div>
+
+    <div
+        class="fixed inset-0 z-[100] hidden min-h-[100svh] items-center justify-center bg-slate/90 px-4 py-6 backdrop-blur-sm touch-none"
+        data-gallery-overlay={galleryId}
+        data-gallery-surface
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+    >
+        <button
+            type="button"
+            class="absolute inset-0 h-full w-full cursor-pointer"
+            data-gallery-backdrop
+            aria-label="Sluit fullscreen galerij"></button>
+        <div
+            class="relative z-10 flex h-full w-full items-center justify-center gap-4"
+        >
+            <button
+                type="button"
+                class="hidden h-12 w-12 items-center justify-center rounded-full border border-bone/40 bg-slate/70 text-bone transition hover:border-accent/80 hover:text-accent sm:flex"
+                data-gallery-prev
+                aria-label="Vorige foto"
+            >
+                ←
+            </button>
+            <figure
+                class="relative flex h-full w-full max-w-5xl flex-col items-center justify-center gap-4"
+            >
+                <div
+                    class="inline-flex max-h-[70vh] max-w-[90vw] overflow-hidden rounded-3xl shadow-2xl"
+                >
+                    <img
+                        class="block max-h-[70vh] max-w-[90vw] rounded-3xl object-contain"
+                        data-gallery-image
+                        alt=""
+                        loading="eager"
+                        style="will-change: opacity, transform;"
+                    />
+                </div>
+                <figcaption
+                    class="flex items-center gap-3 text-sm uppercase tracking-[0.3em] text-bone/60"
+                >
+                    <span data-gallery-counter>1 / 1</span>
+                </figcaption>
+                <button
+                    type="button"
+                    class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-bone/40 bg-slate/70 text-bone transition hover:border-accent/80 hover:text-accent"
+                    data-gallery-close
+                    aria-label="Sluit fullscreen galerij"
+                >
+                    ✕
+                </button>
+            </figure>
+            <button
+                type="button"
+                class="hidden h-12 w-12 items-center justify-center rounded-full border border-bone/40 bg-slate/70 text-bone transition hover:border-accent/80 hover:text-accent sm:flex"
+                data-gallery-next
+                aria-label="Volgende foto"
+            >
+                →
+            </button>
+        </div>
+    </div>
 </section>
+
+<script define:vars={{ galleryId }}>
+    const root = document.querySelector(`[data-gallery-root="${galleryId}"]`);
+
+    if (!root) {
+        return;
+    }
+
+    const images = JSON.parse(root.dataset.images || "[]");
+    const overlay = document.querySelector(
+        `[data-gallery-overlay="${galleryId}"]`,
+    );
+    const mainImage = overlay?.querySelector("[data-gallery-image]");
+    const counter = overlay?.querySelector("[data-gallery-counter]");
+    const thumbButtons = root.querySelectorAll("[data-gallery-thumb]");
+    const swipeSurface = overlay;
+    const closeButtons = overlay?.querySelectorAll("[data-gallery-close]");
+    const backdrop = overlay?.querySelector("[data-gallery-backdrop]");
+    const prevButtons = overlay?.querySelectorAll("[data-gallery-prev]");
+    const nextButtons = overlay?.querySelectorAll("[data-gallery-next]");
+
+    if (overlay && overlay.parentElement !== document.body) {
+        document.body.appendChild(overlay);
+    }
+
+    let currentIndex = 0;
+    let transitionToken = 0;
+    let currentAnimation = null;
+
+    const updateView = () => {
+        if (!mainImage || !counter) return;
+        mainImage.src = images[currentIndex] || "";
+        counter.textContent = `${currentIndex + 1} / ${images.length}`;
+    };
+
+    const openGallery = (index) => {
+        if (!overlay) return;
+        currentIndex = index;
+        updateView();
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+        overlay.setAttribute("aria-hidden", "false");
+        document.documentElement.classList.add("overflow-hidden");
+    };
+
+    const closeGallery = () => {
+        if (!overlay) return;
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        overlay.setAttribute("aria-hidden", "true");
+        document.documentElement.classList.remove("overflow-hidden");
+    };
+
+    const transitionTo = (nextIndex) => {
+        if (!mainImage || images.length === 0) return;
+        const targetIndex = (nextIndex + images.length) % images.length;
+        if (targetIndex === currentIndex) return;
+
+        transitionToken += 1;
+        const token = transitionToken;
+
+        if (currentAnimation?.cancel) {
+            currentAnimation.cancel();
+        }
+
+        currentAnimation = mainImage.animate(
+            [
+                { opacity: 1, transform: "scale(1)" },
+                { opacity: 0, transform: "scale(0.985)" },
+            ],
+            { duration: 160, easing: "ease-out" },
+        );
+
+        currentAnimation.onfinish = () => {
+            if (transitionToken !== token) return;
+            currentIndex = targetIndex;
+            updateView();
+            currentAnimation = mainImage.animate(
+                [
+                    { opacity: 0, transform: "scale(1.015)" },
+                    { opacity: 1, transform: "scale(1)" },
+                ],
+                { duration: 220, easing: "ease-out" },
+            );
+        };
+    };
+
+    const showPrev = () => {
+        transitionTo(currentIndex - 1);
+    };
+
+    const showNext = () => {
+        transitionTo(currentIndex + 1);
+    };
+
+    const attachSwipeHandlers = () => {
+        if (!swipeSurface) return;
+        let startX = 0;
+        let startY = 0;
+        let isTracking = false;
+        let activePointerId = null;
+
+        const startTracking = (clientX, clientY) => {
+            startX = clientX;
+            startY = clientY;
+            isTracking = true;
+        };
+
+        const endTracking = (clientX, clientY) => {
+            if (!isTracking) return;
+            const deltaX = clientX - startX;
+            const deltaY = clientY - startY;
+            isTracking = false;
+
+            if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY)) {
+                return;
+            }
+
+            if (deltaX > 0) {
+                showPrev();
+            } else {
+                showNext();
+            }
+        };
+
+        if ("PointerEvent" in window) {
+            swipeSurface.addEventListener("pointerdown", (event) => {
+                if (!overlay || overlay.classList.contains("hidden")) return;
+                if (event.pointerType === "mouse") return;
+                activePointerId = event.pointerId;
+                swipeSurface.setPointerCapture?.(event.pointerId);
+                startTracking(event.clientX, event.clientY);
+            });
+
+            swipeSurface.addEventListener("pointerup", (event) => {
+                if (activePointerId !== event.pointerId) return;
+                endTracking(event.clientX, event.clientY);
+                activePointerId = null;
+            });
+
+            swipeSurface.addEventListener("pointercancel", (event) => {
+                if (activePointerId !== event.pointerId) return;
+                isTracking = false;
+                activePointerId = null;
+            });
+
+            return;
+        }
+
+        swipeSurface.addEventListener(
+            "touchstart",
+            (event) => {
+                if (!overlay || overlay.classList.contains("hidden")) return;
+                if (event.touches.length !== 1) return;
+                const touch = event.touches[0];
+                startTracking(touch.clientX, touch.clientY);
+            },
+            { passive: true },
+        );
+
+        swipeSurface.addEventListener(
+            "touchend",
+            (event) => {
+                const touch = event.changedTouches[0];
+                endTracking(touch.clientX, touch.clientY);
+            },
+            { passive: true },
+        );
+    };
+
+    thumbButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const index = Number(button.dataset.index || "0");
+            openGallery(index);
+        });
+    });
+
+    closeButtons?.forEach((button) => {
+        button.addEventListener("click", closeGallery);
+    });
+
+    if (backdrop) {
+        backdrop.addEventListener("click", closeGallery);
+    }
+
+    prevButtons?.forEach((button) => {
+        button.addEventListener("click", showPrev);
+    });
+
+    nextButtons?.forEach((button) => {
+        button.addEventListener("click", showNext);
+    });
+
+    attachSwipeHandlers();
+
+    window.addEventListener("keydown", (event) => {
+        if (!overlay || overlay.classList.contains("hidden")) return;
+
+        if (event.key === "Escape") {
+            closeGallery();
+        }
+
+        if (event.key === "ArrowLeft") {
+            showPrev();
+        }
+
+        if (event.key === "ArrowRight") {
+            showNext();
+        }
+    });
+</script>
