@@ -1,0 +1,161 @@
+---
+import type { Tour } from "../types/tour";
+
+const locationLabels: Record<Tour["location"], string> = {
+  lisbon: "Lissabon",
+  sintra: "Sintra",
+};
+
+interface TourShowcaseProps {
+  tours: Tour[];
+}
+
+const { tours } = Astro.props as TourShowcaseProps;
+
+const resolvedTours = tours.map((tour) => ({
+  ...tour,
+  images: tour.images.map((image) => image + "/m/500x0"),
+}));
+---
+
+<section id="tours" class="relative border-t border-bone/10 py-24">
+  <div class="mx-auto max-w-6xl px-6 lg:px-8">
+    <div
+      class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+    >
+      <div class="max-w-3xl">
+        <p class="text-xs uppercase tracking-[0.4em] text-bone/40">
+          Wandel keuzes
+        </p>
+        <h2 class="mt-6 font-display text-3xl text-bone md:text-4xl">
+          Ervaar de sfeer van Lissabon en Sintra te voet
+        </h2>
+        <p class="mt-4 text-sm text-bone/70">
+          Onze selectie van Nederlandstalige wandelingen is met zorg
+          samengesteld voor kleine gezelschappen, waarbij we eeuwenoude
+          straatjes combineren met culinaire lekkernijen en een prachtige
+          natuur.
+        </p>
+      </div>
+    </div>
+    <div class="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-3">
+      {
+        resolvedTours.map((tour) => (
+          <article class="group relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-bone/10 bg-slate/30 transition hover:border-accent/60 hover:shadow-glow">
+            <a
+              href={`/tours/${tour.slug}`}
+              class="absolute inset-0 z-10 rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
+              aria-label={`Bekijk details over ${tour.name}`}
+            >
+              <span class="sr-only">Bekijk details</span>
+            </a>
+            <div class="relative">
+              <img
+                src={tour.images[0]}
+                alt={`${tour.name} — ${locationLabels[tour.location]}`}
+                loading="lazy"
+                class="h-64 w-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+              <div class="absolute bottom-6 left-6 flex flex-col gap-2">
+                <span class="inline-flex w-fit items-center rounded-full border border-white/25 bg-black/40 px-3 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone/70 backdrop-blur">
+                  {locationLabels[tour.location]}
+                </span>
+                <h3 class="font-display text-2xl text-bone md:text-3xl">
+                  {tour.name}
+                </h3>
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col gap-6 px-8 py-8">
+              <header class="space-y-4">
+                <div class="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.28em] text-bone/50">
+                  <span class="rounded-full border border-bone/20 px-4 py-1">
+                    {tour.included.length} inclusies
+                  </span>
+                </div>
+              </header>
+              <ul class="space-y-3 text-sm text-bone/70">
+                {tour.included.map((item) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-1.5 inline-flex size-1.5 rounded-full bg-accent/80" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class="relative z-20 mt-auto flex flex-col gap-4 border-t border-bone/10 pt-6 text-sm">
+                <span class="whitespace-pre-line font-semibold text-bone">
+                  {tour.price}
+                </span>
+                <div class="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.3em]">
+                  <a
+                    href={`/tours/${tour.slug}`}
+                    class="text-bone/60 transition hover:text-champagne"
+                  >
+                    Bekijk details
+                  </a>
+                  <a
+                    href={`/?tour=${encodeURIComponent(tour.name)}#contact`}
+                    class="text-accent transition hover:text-champagne"
+                    data-tour-link
+                    data-tour={tour.name}
+                  >
+                    {tour.toBook ? "Boek nu" : "Informeer naar opties"}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  document.querySelectorAll("[data-tour-link]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      const isModifiedClick =
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey;
+
+      if (isModifiedClick) {
+        return;
+      }
+
+      const contactSection = document.getElementById("contact");
+      if (!contactSection) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const tourName = link.getAttribute("data-tour");
+      const tourSelect = document.getElementById("tour");
+      if (tourName && tourSelect && "value" in tourSelect) {
+        tourSelect.value = tourName;
+      }
+
+      if (tourName) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("tour", tourName);
+        url.hash = "contact";
+        history.replaceState(null, "", url);
+      }
+
+      contactSection.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+    });
+  });
+</script>
