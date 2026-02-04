@@ -340,7 +340,8 @@ const countries = countryCodes
           </div>
         </div>
 
-        <!-- GDPR Consent -->
+        <!-- GDPR Consent (temporarily disabled) -->
+        <!--
         <div class="md:col-span-2 flex items-start gap-3 mt-2">
           <input
             type="checkbox"
@@ -367,6 +368,7 @@ const countries = countryCodes
         >
           U moet akkoord gaan met het privacybeleid om verder te gaan.
         </span>
+        -->
 
         <div
           class="md:col-span-2 flex flex-col-reverse items-stretch gap-3 mt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
@@ -471,9 +473,9 @@ const countries = countryCodes
     "notities",
   ) as HTMLTextAreaElement;
   const charCounter = document.getElementById("char-counter") as HTMLElement;
-  const gdprCheckbox = document.getElementById(
-    "gdpr-consent",
-  ) as HTMLInputElement;
+  // const gdprCheckbox = document.getElementById(
+  //   "gdpr-consent",
+  // ) as HTMLInputElement;
 
   let currentStep = 1;
 
@@ -595,19 +597,19 @@ const countries = countryCodes
     });
 
     // Validate GDPR checkbox
-    const gdprError = document.querySelector(
-      "#step-2 > .error-message:last-of-type",
-    ) as HTMLElement;
-    if (!gdprCheckbox.checked) {
-      if (gdprError) {
-        gdprError.classList.remove("hidden");
-      }
-      isValid = false;
-    } else {
-      if (gdprError) {
-        gdprError.classList.add("hidden");
-      }
-    }
+    // const gdprError = document.querySelector(
+    //   "#step-2 > .error-message:last-of-type",
+    // ) as HTMLElement;
+    // if (!gdprCheckbox.checked) {
+    //   if (gdprError) {
+    //     gdprError.classList.remove("hidden");
+    //   }
+    //   isValid = false;
+    // } else {
+    //   if (gdprError) {
+    //     gdprError.classList.add("hidden");
+    //   }
+    // }
 
     return isValid;
   }
