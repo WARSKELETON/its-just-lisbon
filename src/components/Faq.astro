@@ -23,7 +23,11 @@ const { faqs } = Astro.props as { faqs: Faq[] };
     <div class="mt-16 grid gap-6">
       {
         faqs.map((faq) => (
-          <details class="group rounded-3xl border border-bone/10 bg-slate/25 text-sm text-bone/70 backdrop-blur-md transition hover:border-accent/40">
+          <details
+            class="group rounded-3xl border border-bone/10 bg-slate/25 text-sm text-bone/70 backdrop-blur-md transition hover:border-accent/40"
+            data-faq-item
+            data-faq-question={faq.question}
+          >
             <summary class="flex w-full cursor-pointer list-none items-center justify-between gap-6 p-8 font-display text-xl text-bone">
               <span>{faq.question}</span>
               <span class="inline-flex h-8 w-8 items-center justify-center text-bone/60 transition group-open:border-accent/50 group-open:text-accent">
@@ -70,3 +74,17 @@ const { faqs } = Astro.props as { faqs: Faq[] };
     </div>
   </div>
 </section>
+
+<script>
+  const faqItems = document.querySelectorAll("[data-faq-item]");
+
+  faqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      const question = item.getAttribute("data-faq-question") || "unknown";
+      window.phCapture?.("faq_toggle", {
+        question,
+        open: item.open ? "true" : "false",
+      });
+    });
+  });
+</script>

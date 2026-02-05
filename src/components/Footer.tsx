@@ -9,10 +9,22 @@ const Footer: FC = () => {
           <p className="mt-2 text-xs uppercase tracking-[0.3em] text-bone/40">Nederlandse gids in Lissabon &amp; Sintra</p>
         </div>
         <div className="flex flex-wrap gap-6">
-          <a href="#tours" className="uppercase tracking-[0.3em] transition hover:text-accent">
+          <a
+            href="#tours"
+            className="uppercase tracking-[0.3em] transition hover:text-accent"
+            data-ph-event="nav_link_click"
+            data-ph-label="tours"
+            data-ph-location="footer"
+          >
             Toers
           </a>
-          <a href="#contact" className="uppercase tracking-[0.3em] transition hover:text-accent">
+          <a
+            href="#contact"
+            className="uppercase tracking-[0.3em] transition hover:text-accent"
+            data-ph-event="nav_link_click"
+            data-ph-label="contact"
+            data-ph-location="footer"
+          >
             Boek Een Toer
           </a>
         </div>

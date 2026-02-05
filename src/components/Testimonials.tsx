@@ -46,6 +46,10 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
       return;
     }
 
+    window.phCapture?.('reviews_scroll', {
+      direction: direction === 1 ? 'next' : 'prev',
+    });
+
     const firstCard = track.querySelector<HTMLElement>('[data-review-card]');
     const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : track.clientWidth;
     const styles = getComputedStyle(track);
@@ -110,12 +114,18 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
                   <label
                     htmlFor={`review-${item.uuid}`}
                     className="w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:hidden"
+                    data-ph-event="review_toggle"
+                    data-ph-action="expand"
+                    data-ph-review-id={item.uuid}
                   >
                     Lees meer
                   </label>
                   <label
                     htmlFor={`review-${item.uuid}`}
                     className="hidden w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:inline-flex"
+                    data-ph-event="review_toggle"
+                    data-ph-action="collapse"
+                    data-ph-review-id={item.uuid}
                   >
                     Lees minder
                   </label>

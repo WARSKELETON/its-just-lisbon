@@ -44,6 +44,17 @@ const organizationJsonLd = buildOrganizationJsonLd({
 
 const pageJsonLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 const structuredData: StructuredData[] = [organizationJsonLd, ...pageJsonLd];
+
+const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
+const posthogHost =
+  import.meta.env.PUBLIC_POSTHOG_HOST ?? "https://eu.i.posthog.com";
+const posthogSnippet = posthogKey
+  ? `!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('${posthogKey}', {
+        api_host: '${posthogHost}',
+        defaults: '2025-11-30'
+    })`
+  : null;
 ---
 
 <html lang="nl" class="scroll-smooth">
@@ -83,6 +94,17 @@ const structuredData: StructuredData[] = [organizationJsonLd, ...pageJsonLd];
         <script type="application/ld+json" set:html={JSON.stringify(entry)} />
       ))
     }
+    {posthogSnippet ? <script is:inline set:html={posthogSnippet} /> : null}
+    <script is:inline>
+      window.phCapture =
+        window.phCapture ||
+        ((eventName, props = {}) => {
+          if (!eventName || !window.posthog || typeof window.posthog.capture !== "function") {
+            return;
+          }
+          window.posthog.capture(eventName, props);
+        });
+    </script>
   </head>
   <body class="relative overflow-x-hidden">
     <div
@@ -92,5 +114,38 @@ const structuredData: StructuredData[] = [organizationJsonLd, ...pageJsonLd];
     <main class="relative">
       <slot />
     </main>
+    <script is:inline>
+      const extractProps = (dataset) => {
+        const props = {};
+        Object.entries(dataset).forEach(([key, value]) => {
+          if (!key.startsWith("ph") || key === "phEvent" || !value) {
+            return;
+          }
+          const trimmed = key.slice(2);
+          const normalized =
+            trimmed.length > 0
+              ? trimmed.charAt(0).toLowerCase() + trimmed.slice(1)
+              : trimmed;
+          props[normalized] = value;
+        });
+        return props;
+      };
+
+      document.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+          return;
+        }
+        const element = target.closest("[data-ph-event]");
+        if (!element) {
+          return;
+        }
+        const eventName = element.getAttribute("data-ph-event");
+        if (!eventName) {
+          return;
+        }
+        window.phCapture?.(eventName, extractProps(element.dataset));
+      });
+    </script>
   </body>
 </html>

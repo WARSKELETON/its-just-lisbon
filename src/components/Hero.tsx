@@ -31,6 +31,8 @@ const Hero: FC = () => {
             <a
               href="#tours"
               className="group inline-flex items-center justify-center rounded-full border border-transparent bg-accent px-8 py-3 text-sm font-semibold uppercase tracking-[0.28em] text-midnight transition hover:text-midnight hover:bg-champagne"
+              data-ph-event="hero_cta_click"
+              data-ph-target="tours"
             >
               Toon Mij Alle Toers
             </a>

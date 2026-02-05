@@ -46,6 +46,10 @@ const resolvedTours = tours.map((tour) => ({
               href={`/tours/${tour.slug}`}
               class="absolute inset-0 z-10 rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
               aria-label={`Bekijk details over ${tour.name}`}
+              data-ph-event="tour_card_open"
+              data-ph-tour={tour.name}
+              data-ph-location={locationLabels[tour.location]}
+              data-ph-source="card"
             >
               <span class="sr-only">Bekijk details</span>
             </a>
@@ -90,6 +94,10 @@ const resolvedTours = tours.map((tour) => ({
                   <a
                     href={`/tours/${tour.slug}`}
                     class="text-bone/60 transition hover:text-champagne"
+                    data-ph-event="tour_detail_click"
+                    data-ph-tour={tour.name}
+                    data-ph-location={locationLabels[tour.location]}
+                    data-ph-source="link"
                   >
                     Bekijk details
                   </a>
@@ -98,6 +106,11 @@ const resolvedTours = tours.map((tour) => ({
                     class="text-accent transition hover:text-champagne"
                     data-tour-link
                     data-tour={tour.name}
+                    data-ph-event="tour_book_click"
+                    data-ph-tour={tour.name}
+                    data-ph-location={locationLabels[tour.location]}
+                    data-ph-availability={tour.toBook ? "bookable" : "inquire"}
+                    data-ph-source="showcase"
                   >
                     {tour.toBook ? "Boek nu" : "Informeer naar opties"}
                   </a>

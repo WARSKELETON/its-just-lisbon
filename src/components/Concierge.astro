@@ -489,6 +489,10 @@ const countries = countryCodes
 
     if (matchingOption) {
       tourSelect.value = matchingOption.value;
+      window.phCapture?.("booking_prefill_from_query", {
+        tour: matchingOption.value,
+        source: "query",
+      });
     }
   }
 
@@ -563,7 +567,7 @@ const countries = countryCodes
     return true;
   }
 
-  function validateStep1(): boolean {
+  function validateStep1() {
     const fields = [
       naamInput,
       emailInput,
@@ -572,27 +576,31 @@ const countries = countryCodes
       tourSelect,
     ];
     let isValid = true;
+    const invalidFields: string[] = [];
 
     fields.forEach((field) => {
       if (!validateField(field)) {
         isValid = false;
+        invalidFields.push(field.id || field.name);
       }
     });
 
-    return isValid;
+    return { isValid, invalidFields };
   }
 
-  function validateStep2(): boolean {
+  function validateStep2() {
     const datumInput = document.getElementById("datum") as HTMLInputElement;
     const tijdSelect = document.getElementById("tijd") as HTMLSelectElement;
     const gastenInput = document.getElementById("gasten") as HTMLInputElement;
 
     const fields = [datumInput, tijdSelect, gastenInput];
     let isValid = true;
+    const invalidFields: string[] = [];
 
     fields.forEach((field) => {
       if (!validateField(field)) {
         isValid = false;
+        invalidFields.push(field.id || field.name);
       }
     });
 
@@ -611,7 +619,7 @@ const countries = countryCodes
     //   }
     // }
 
-    return isValid;
+    return { isValid, invalidFields };
   }
 
   function updateStepIndicator() {
@@ -669,6 +677,7 @@ const countries = countryCodes
     step2.classList.add("grid");
     currentStep = 2;
     updateStepIndicator();
+    window.phCapture?.("booking_step_view", { step: 2 });
   }
 
   function goToStep1() {
@@ -678,18 +687,31 @@ const countries = countryCodes
     step1.classList.add("grid");
     currentStep = 1;
     updateStepIndicator();
+    window.phCapture?.("booking_step_view", { step: 1 });
   }
 
   // Event listeners
   nextButton.addEventListener("click", (e) => {
     e.preventDefault();
-    if (validateStep1()) {
-      goToStep2();
+    window.phCapture?.("booking_step_next_click", { step: 1 });
+    const { isValid, invalidFields } = validateStep1();
+    if (!isValid) {
+      window.phCapture?.("booking_step_validation_error", {
+        step: 1,
+        fields: invalidFields,
+      });
+      return;
     }
+    window.phCapture?.("booking_step_completed", {
+      step: 1,
+      tour: tourSelect.value || undefined,
+    });
+    goToStep2();
   });
 
   prevButton.addEventListener("click", (e) => {
     e.preventDefault();
+    window.phCapture?.("booking_step_back_click", { step: 2 });
     goToStep1();
   });
 
@@ -717,6 +739,9 @@ const countries = countryCodes
 
   tourSelect.addEventListener("change", () => {
     validateField(tourSelect);
+    if (tourSelect.value) {
+      window.phCapture?.("booking_tour_selected", { tour: tourSelect.value });
+    }
   });
 
   // Character counter for notes
@@ -738,10 +763,16 @@ const countries = countryCodes
 
   // Form submission with loading state
   form.addEventListener("submit", (e) => {
-    if (!validateStep2()) {
+    const { isValid, invalidFields } = validateStep2();
+    if (!isValid) {
       e.preventDefault();
+      window.phCapture?.("booking_submit_invalid", { fields: invalidFields });
       return;
     }
+
+    window.phCapture?.("booking_submit", {
+      tour: tourSelect.value || undefined,
+    });
 
     // Show loading state
     submitButton.disabled = true;
@@ -751,4 +782,5 @@ const countries = countryCodes
 
   // Initialize
   updateStepIndicator();
+  window.phCapture?.("booking_step_view", { step: 1, initial: "true" });
 </script>

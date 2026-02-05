@@ -131,7 +131,7 @@ const resolvedImages = images.map((image) => image || fallbackImage);
     </div>
 </section>
 
-<script define:vars={{ galleryId }}>
+<script define:vars={{ galleryId, tourName }}>
     const root = document.querySelector(`[data-gallery-root="${galleryId}"]`);
 
     if (!root) {
@@ -165,7 +165,7 @@ const resolvedImages = images.map((image) => image || fallbackImage);
         counter.textContent = `${currentIndex + 1} / ${images.length}`;
     };
 
-    const openGallery = (index) => {
+    const openGallery = (index, source = "thumb") => {
         if (!overlay) return;
         currentIndex = index;
         updateView();
@@ -173,14 +173,26 @@ const resolvedImages = images.map((image) => image || fallbackImage);
         overlay.classList.add("flex");
         overlay.setAttribute("aria-hidden", "false");
         document.documentElement.classList.add("overflow-hidden");
+        window.phCapture?.("gallery_open", {
+            index,
+            source,
+            total: images.length,
+            tour: tourName || undefined,
+        });
     };
 
-    const closeGallery = () => {
+    const closeGallery = (source = "button") => {
         if (!overlay) return;
         overlay.classList.add("hidden");
         overlay.classList.remove("flex");
         overlay.setAttribute("aria-hidden", "true");
         document.documentElement.classList.remove("overflow-hidden");
+        window.phCapture?.("gallery_close", {
+            index: currentIndex,
+            source,
+            total: images.length,
+            tour: tourName || undefined,
+        });
     };
 
     const transitionTo = (nextIndex) => {
@@ -217,11 +229,25 @@ const resolvedImages = images.map((image) => image || fallbackImage);
         };
     };
 
-    const showPrev = () => {
+    const showPrev = (source = "button") => {
+        window.phCapture?.("gallery_navigate", {
+            direction: "prev",
+            source,
+            index: currentIndex,
+            total: images.length,
+            tour: tourName || undefined,
+        });
         transitionTo(currentIndex - 1);
     };
 
-    const showNext = () => {
+    const showNext = (source = "button") => {
+        window.phCapture?.("gallery_navigate", {
+            direction: "next",
+            source,
+            index: currentIndex,
+            total: images.length,
+            tour: tourName || undefined,
+        });
         transitionTo(currentIndex + 1);
     };
 
@@ -249,9 +275,9 @@ const resolvedImages = images.map((image) => image || fallbackImage);
             }
 
             if (deltaX > 0) {
-                showPrev();
+                showPrev("swipe");
             } else {
-                showNext();
+                showNext("swipe");
             }
         };
 
@@ -303,24 +329,24 @@ const resolvedImages = images.map((image) => image || fallbackImage);
     thumbButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const index = Number(button.dataset.index || "0");
-            openGallery(index);
+            openGallery(index, "thumb");
         });
     });
 
     closeButtons?.forEach((button) => {
-        button.addEventListener("click", closeGallery);
+        button.addEventListener("click", () => closeGallery("button"));
     });
 
     if (backdrop) {
-        backdrop.addEventListener("click", closeGallery);
+        backdrop.addEventListener("click", () => closeGallery("backdrop"));
     }
 
     prevButtons?.forEach((button) => {
-        button.addEventListener("click", showPrev);
+        button.addEventListener("click", () => showPrev("button"));
     });
 
     nextButtons?.forEach((button) => {
-        button.addEventListener("click", showNext);
+        button.addEventListener("click", () => showNext("button"));
     });
 
     attachSwipeHandlers();
@@ -329,15 +355,15 @@ const resolvedImages = images.map((image) => image || fallbackImage);
         if (!overlay || overlay.classList.contains("hidden")) return;
 
         if (event.key === "Escape") {
-            closeGallery();
+            closeGallery("keyboard");
         }
 
         if (event.key === "ArrowLeft") {
-            showPrev();
+            showPrev("keyboard");
         }
 
         if (event.key === "ArrowRight") {
-            showNext();
+            showNext("keyboard");
         }
     });
 </script>
