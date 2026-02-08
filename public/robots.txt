@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /success
+Disallow: /success/
 
 Sitemap: https://www.just-lisbon.com/sitemap-index.xml

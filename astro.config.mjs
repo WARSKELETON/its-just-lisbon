@@ -10,7 +10,9 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false
     }),
-    sitemap()
+    sitemap({
+      filter: (page) => !page.endsWith('/success/')
+    })
   ],
   srcDir: 'src',
   output: 'static'
