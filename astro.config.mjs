@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://www.just-lisbon.com',
+  site: 'https://just-lisbon.com',
   integrations: [
     react(),
     tailwind({

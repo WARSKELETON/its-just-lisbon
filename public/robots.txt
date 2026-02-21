@@ -3,4 +3,4 @@ Allow: /
 Disallow: /success
 Disallow: /success/
 
-Sitemap: https://www.just-lisbon.com/sitemap-index.xml
+Sitemap: https://just-lisbon.com/sitemap-index.xml

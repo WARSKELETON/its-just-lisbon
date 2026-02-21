@@ -7,14 +7,6 @@ import {
   toAbsoluteUrl,
 } from './tourUtils';
 
-const randomRatingValue = (): number => {
-  const value = 4 + Math.random();
-  return Number(value.toFixed(2));
-};
-
-const randomRatingCount = (): number =>
-  Math.floor(1000 + Math.random() * 9000);
-
 type TourEventOptions = {
   siteUrl?: URL;
   fallbackImage?: string;
@@ -50,17 +42,11 @@ export const buildTourEventItem = (
     ...(url ? { '@id': url, url } : {}),
     name: tour.name,
     description: tour.description,
-    startDate,
+    ...(startDate ? { startDate } : {}),
     image: images.length ? images : [resolvedFallback],
     location: {
       '@type': 'Place',
       name: locationLabels[tour.location],
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      bestRating: 5,
-      ratingValue: randomRatingValue(),
-      ratingCount: randomRatingCount(),
     },
     ...(offers ? { offers } : {}),
   };
