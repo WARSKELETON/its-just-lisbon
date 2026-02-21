@@ -10,7 +10,7 @@ const Footer: FC = () => {
         </div>
         <div className="flex flex-wrap gap-6">
           <a
-            href="#tours"
+            href="/#tours"
             className="uppercase tracking-[0.3em] transition hover:text-accent"
             data-ph-event="nav_link_click"
             data-ph-label="tours"

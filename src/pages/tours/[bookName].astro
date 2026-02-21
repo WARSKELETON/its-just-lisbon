@@ -30,6 +30,7 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070";
 const heroImage = tour.images[0] || fallbackImage;
 const locationLabel = tour.location === "lisbon" ? "Lissabon" : "Sintra";
+// TODO: Add "Gerelateerde tours" once direct Storyblok support is available.
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : undefined;
@@ -68,35 +69,55 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
         />
       </div>
       <div
-        class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-midnight/95"
+        class="absolute inset-0 bg-gradient-to-b from-midnight/82 via-midnight/45 to-midnight/88"
       >
       </div>
-      <div class="relative mx-auto max-w-5xl px-6 py-24 lg:px-8">
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(242,193,107,0.26),transparent_44%)]"
+      >
+      </div>
+      <div class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-midnight/90 via-midnight/72 to-midnight/38 lg:w-3/4">
+      </div>
+      <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-midnight/92 to-transparent">
+      </div>
+      <div class="relative mx-auto flex min-h-[74vh] max-w-6xl items-end px-6 pb-14 pt-28 lg:px-8 lg:pb-20">
         <div
-          class="flex flex-col gap-6 rounded-3xl border border-white/10 p-8 shadow-2xl shadow-black/40 backdrop-blur-sm lg:p-12"
+          class="w-full max-w-4xl rounded-[2rem] border border-white/20 bg-black/32 p-7 shadow-2xl shadow-black/40 backdrop-blur-md lg:p-10"
         >
-          <div class="inline-flex w-fit items-center gap-3">
-            <span
-              class="rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone/80"
+          <div class="space-y-7">
+            <nav
+              aria-label="Breadcrumb"
+              class="flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 text-[0.6rem] uppercase tracking-[0.22em] text-bone/72 sm:tracking-[0.28em]"
             >
-              {locationLabel}
-            </span>
-          </div>
-          <div class="space-y-6">
-            <h1 class="font-display text-4xl text-bone md:text-6xl">
-              {tour.name}
-            </h1>
-            <p
-              class="max-w-2xl text-sm leading-relaxed text-bone/85 md:text-base"
-            >
-              {tour.description}
-            </p>
-            <div
-              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6"
-            >
+              <a href="/" class="transition hover:text-accent">Home</a>
+              <span aria-hidden="true">/</span>
+              <a href="/#tours" class="transition hover:text-accent">Tours</a>
+              <span aria-hidden="true" class="hidden md:inline">/</span>
+              <span aria-current="page" class="basis-full text-bone leading-snug md:basis-auto">
+                {tour.name}
+              </span>
+            </nav>
+            <div class="space-y-5">
+              <span
+                class="inline-flex w-fit items-center rounded-full border border-white/30 bg-black/35 px-4 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone backdrop-blur-sm"
+              >
+                {locationLabel}
+              </span>
+              <h1
+                class="max-w-3xl font-display text-4xl leading-tight text-bone drop-shadow-[0_4px_16px_rgba(0,0,0,0.55)] md:text-6xl md:leading-[1.08]"
+              >
+                {tour.name}
+              </h1>
+              <p
+                class="max-w-2xl text-base leading-relaxed text-bone/95 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)] md:text-xl"
+              >
+                {tour.description}
+              </p>
+            </div>
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
               <a
                 href="#contact"
-                class="inline-flex items-center justify-center rounded-full border border-accent/40 bg-accent/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-accent transition hover:border-accent hover:bg-accent/20 hover:text-champagne"
+                class="inline-flex items-center justify-center rounded-full border border-transparent bg-accent px-7 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-midnight transition hover:bg-champagne"
                 data-ph-event="tour_page_book_click"
                 data-ph-tour={tour.name}
                 data-ph-location={locationLabel}
@@ -104,9 +125,11 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
               >
                 Boek Nu
               </a>
-              <span class="text-xs uppercase tracking-[0.35em] text-bone/65">
+              <p
+                class="inline-flex w-fit items-center rounded-full border border-white/25 bg-black/35 px-4 py-2 text-xs uppercase tracking-[0.35em] text-bone/90"
+              >
                 Vanaf {tour.price.replace("\n", " / ")}
-              </span>
+              </p>
             </div>
           </div>
         </div>
@@ -161,6 +184,12 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
               data-ph-placement="sidebar"
             >
               Boek Nu
+            </a>
+            <a
+              href="/#tours"
+              class="inline-flex w-full items-center justify-center rounded-full border border-bone/30 px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-bone/70 transition hover:border-accent hover:text-accent"
+            >
+              Alle Tours
             </a>
             <p class="text-[0.7rem] uppercase tracking-[0.3em] text-bone/40">
               persoonlijke aanpassingen zijn altijd mogelijk, laat ons weten wat

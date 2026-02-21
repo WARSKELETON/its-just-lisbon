@@ -5,6 +5,82 @@ type TestimonialsProps = {
   reviews: Review[];
 };
 
+type ExpandableReviewProps = {
+  content: string;
+  reviewId: string;
+};
+
+const ExpandableReview: FC<ExpandableReviewProps> = ({ content, reviewId }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const measureRef = useRef<HTMLQuoteElement | null>(null);
+
+  useEffect(() => {
+    const measuredElement = measureRef.current;
+    if (!measuredElement) {
+      return;
+    }
+
+    const updateTruncationState = () => {
+      const shouldTruncate = measuredElement.scrollHeight > measuredElement.clientHeight + 1;
+      setIsTruncated(shouldTruncate);
+
+      if (!shouldTruncate) {
+        setIsExpanded(false);
+      }
+    };
+
+    updateTruncationState();
+
+    let resizeObserver: ResizeObserver | null = null;
+
+    if (typeof ResizeObserver !== 'undefined' && measuredElement.parentElement) {
+      resizeObserver = new ResizeObserver(updateTruncationState);
+      resizeObserver.observe(measuredElement.parentElement);
+    }
+
+    window.addEventListener('resize', updateTruncationState);
+
+    return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', updateTruncationState);
+    };
+  }, [content]);
+
+  return (
+    <div className="relative flex flex-col gap-3">
+      <blockquote
+        className={`text-sm text-bone/75 ${
+          isExpanded
+            ? 'overflow-visible [display:block]'
+            : 'overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6]'
+        }`}
+      >
+        “{content}”
+      </blockquote>
+      <blockquote
+        ref={measureRef}
+        aria-hidden="true"
+        className="pointer-events-none invisible absolute left-0 right-0 top-0 w-full overflow-hidden text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6]"
+      >
+        “{content}”
+      </blockquote>
+      {isTruncated ? (
+        <button
+          type="button"
+          onClick={() => setIsExpanded((previous) => !previous)}
+          className="w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80"
+          data-ph-event="review_toggle"
+          data-ph-action={isExpanded ? 'collapse' : 'expand'}
+          data-ph-review-id={reviewId}
+        >
+          {isExpanded ? 'Lees minder' : 'Lees meer'}
+        </button>
+      ) : null}
+    </div>
+  );
+};
+
 const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
   if (!reviews.length) {
     return null;
@@ -106,30 +182,7 @@ const Testimonials: FC<TestimonialsProps> = ({ reviews }) => {
                 </div>
               </div>
               {item.content ? (
-                <div className="flex flex-col gap-3">
-                  <input id={`review-${item.uuid}`} type="checkbox" className="peer sr-only" />
-                  <blockquote className="text-sm text-bone/75 overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] peer-checked:[-webkit-line-clamp:unset] peer-checked:[display:block] peer-checked:overflow-visible">
-                    “{item.content}”
-                  </blockquote>
-                  <label
-                    htmlFor={`review-${item.uuid}`}
-                    className="w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:hidden"
-                    data-ph-event="review_toggle"
-                    data-ph-action="expand"
-                    data-ph-review-id={item.uuid}
-                  >
-                    Lees meer
-                  </label>
-                  <label
-                    htmlFor={`review-${item.uuid}`}
-                    className="hidden w-fit cursor-pointer text-[0.6rem] uppercase tracking-[0.3em] text-accent/70 transition hover:text-bone/80 peer-checked:inline-flex"
-                    data-ph-event="review_toggle"
-                    data-ph-action="collapse"
-                    data-ph-review-id={item.uuid}
-                  >
-                    Lees minder
-                  </label>
-                </div>
+                <ExpandableReview content={item.content} reviewId={item.uuid} />
               ) : null}
               {item.tour ? (
                 <figcaption className="border-t border-bone/10 pt-6 text-xs uppercase tracking-[0.3em] text-bone/50">
