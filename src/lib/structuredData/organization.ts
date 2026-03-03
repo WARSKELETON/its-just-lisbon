@@ -1,4 +1,5 @@
 import type { TravelAgency, WithContext } from 'schema-dts';
+import { SOCIAL_PROFILES } from '../../data/socialProfiles';
 
 type OrganizationOptions = {
   siteUrl?: URL;
@@ -15,6 +16,7 @@ export const buildOrganizationData = (
     '@id': siteUrl?.href ?? 'https://www.just-lisbon.com',
     name: 'Just Lisbon',
     url: siteUrl?.href ?? 'https://www.just-lisbon.com',
+    sameAs: SOCIAL_PROFILES.map((profile) => profile.href),
     logo: logoUrl,
     email: 'renatevicente@gmail.com',
     areaServed: ['Lisboa', 'Sintra'],
