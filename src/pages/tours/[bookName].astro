@@ -30,6 +30,33 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=2070";
 const heroImage = tour.images[0] || fallbackImage;
 const locationLabel = tour.location === "lisbon" ? "Lissabon" : "Sintra";
+const cleanText = (value: string): string => value.replace(/\s+/g, " ").trim();
+const clipText = (value: string, maxLength: number): string => {
+  const normalized = cleanText(value);
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  const cut = normalized.slice(0, maxLength + 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  const safeSlice =
+    lastSpace > 0 ? cut.slice(0, lastSpace) : cut.slice(0, maxLength);
+
+  return `${safeSlice.trim()}…`;
+};
+const highlightSnippet = tour.landmarks
+  .map((landmark) => cleanText(landmark))
+  .filter((landmark) => landmark.length > 0)
+  .join(", ");
+const locationKeyword = tour.location === "lisbon" ? "Lissabon" : "Sintra";
+const highlightSentence = highlightSnippet
+  ? ` Ontdek ${highlightSnippet}.`
+  : "";
+const titleBase =
+  tour.location === "lisbon"
+    ? `${tour.name} | Nederlandse gids Lissabon`
+    : `${tour.name} | Nederlandse gids Sintra`;
+const descriptionBase = `Privé tour met Nederlandse gids in ${locationKeyword}.${highlightSentence} Volledig op maat.`;
 // TODO: Add "Gerelateerde tours" once direct Storyblok support is available.
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
@@ -41,8 +68,8 @@ const tourJsonLd = buildTouristTripJsonLd(tour, {
 });
 
 const meta = {
-  title: `${tour.name} met Nederlandse gids in ${locationLabel} | Just Lisbon`,
-  description: tour.description,
+  title: titleBase,
+  description: clipText(descriptionBase, 156),
 };
 const tourEventJsonLd = buildTourEventJsonLd(tour, { siteUrl: Astro.site });
 const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
@@ -76,11 +103,17 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
         class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(242,193,107,0.26),transparent_44%)]"
       >
       </div>
-      <div class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-midnight/90 via-midnight/72 to-midnight/38 lg:w-3/4">
+      <div
+        class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-midnight/90 via-midnight/72 to-midnight/38 lg:w-3/4"
+      >
       </div>
-      <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-midnight/92 to-transparent">
+      <div
+        class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-midnight/92 to-transparent"
+      >
       </div>
-      <div class="relative mx-auto flex min-h-[74vh] max-w-6xl items-end px-6 pb-14 pt-28 lg:px-8 lg:pb-20">
+      <div
+        class="relative mx-auto flex min-h-[74vh] max-w-6xl items-end px-6 pb-14 pt-28 lg:px-8 lg:pb-20"
+      >
         <div
           class="w-full max-w-4xl rounded-[2rem] border border-white/20 bg-black/32 p-7 shadow-2xl shadow-black/40 backdrop-blur-md lg:p-10"
         >
@@ -93,7 +126,10 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
               <span aria-hidden="true">/</span>
               <a href="/#tours" class="transition hover:text-accent">Tours</a>
               <span aria-hidden="true" class="hidden md:inline">/</span>
-              <span aria-current="page" class="basis-full text-bone leading-snug md:basis-auto">
+              <span
+                aria-current="page"
+                class="basis-full text-bone leading-snug md:basis-auto"
+              >
                 {tour.name}
               </span>
             </nav>
@@ -114,7 +150,9 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
                 {tour.description}
               </p>
             </div>
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+            <div
+              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5"
+            >
               <a
                 href="#contact"
                 class="inline-flex items-center justify-center rounded-full border border-transparent bg-accent px-7 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-midnight transition hover:bg-champagne"
