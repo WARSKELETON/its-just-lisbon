@@ -1,4 +1,4 @@
-import type { Tour } from '../types/tour';
+import type { Tour, TourFaq } from '../types/tour';
 import { getStoryblokApi } from '../lib/storyblok';
 import { fallbackTours } from './staticTours';
 import {
@@ -63,6 +63,32 @@ const toImages = (value: unknown): Tour['images'] => {
   return images;
 };
 
+const toFaqs = (value: unknown): TourFaq[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const faqs: TourFaq[] = [];
+
+  for (const entry of value) {
+    if (!entry || typeof entry !== 'object') {
+      continue;
+    }
+
+    const faq = entry as Record<string, unknown>;
+    const question = readString(faq.question);
+    const answer = readString(faq.answer);
+
+    if (!question || !answer) {
+      continue;
+    }
+
+    faqs.push({ question, answer });
+  }
+
+  return faqs;
+};
+
 const normalizeStory = (story: StoryblokStory, index: number): Tour => {
   const content = (story.content ?? {}) as Record<string, unknown>;
   const storySlug = readString(story.slug);
@@ -94,6 +120,7 @@ const normalizeStory = (story: StoryblokStory, index: number): Tour => {
   const included = toStringArray(readField(content, ['included', 'inclusions']));
   const landmarks = toStringArray(readField(content, ['landmarks', 'highlights']));
   const images = toImages(readField(content, ['images', 'gallery', 'media']));
+  const faqs = toFaqs(readField(content, ['faqs']));
   const uuid = readString(story.uuid) || fallback.uuid || slug;
 
   return {
@@ -108,6 +135,7 @@ const normalizeStory = (story: StoryblokStory, index: number): Tour => {
     included: included.length ? included : [],
     price,
     images: images.length ? images : [],
+    faqs: faqs.length ? faqs : [],
   };
 };
 

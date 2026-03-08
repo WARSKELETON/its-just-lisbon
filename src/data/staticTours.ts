@@ -23,6 +23,7 @@ const staticTours: Tour[] = [
       'img/alfama/2.jpg',
       'img/alfama/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: '6ca3be58-d05a-48ff-94e1-648f08b7bee3',
@@ -51,6 +52,7 @@ const staticTours: Tour[] = [
       'img/culinaire/2.jpg',
       'img/culinaire/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: '9b76fc60-79d6-46dc-9e17-e5160ab109ca',
@@ -74,6 +76,7 @@ const staticTours: Tour[] = [
       'img/bohemian/2.jpg',
       'img/bohemian/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: 'fb502a98-06ed-45a8-9134-20fbea24339e',
@@ -97,6 +100,7 @@ const staticTours: Tour[] = [
       'img/fietstoer/2.jpg',
       'img/fietstoer/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: '55971b73-35e2-4b65-bfab-6d4290394a0f',
@@ -120,6 +124,7 @@ const staticTours: Tour[] = [
       'img/tram/2.jpg',
       'img/tram/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: '1bef3531-d7dd-4fdf-8e5a-c6d34d82de24',
@@ -143,6 +148,7 @@ const staticTours: Tour[] = [
       'img/streetart/2.jpg',
       'img/streetart/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: '18ccda80-75e9-41f6-8d7d-5daa5e29818a',
@@ -166,6 +172,7 @@ const staticTours: Tour[] = [
       'img/regaleira/2.jpg',
       'img/regaleira/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: 'c586027f-e029-4b58-b00e-3565076c26a3',
@@ -189,6 +196,7 @@ const staticTours: Tour[] = [
       'img/mouros/2.jpg',
       'img/mouros/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: '11e3b3be-65b6-46cc-a74f-e976fa8b564f',
@@ -212,6 +220,7 @@ const staticTours: Tour[] = [
       'img/pena/2.jpg',
       'img/pena/3.jpg'
     ],
+    faqs: [],
   },
   {
     uuid: 'baddc3be-d266-4346-a546-4426d805a7c6',
@@ -239,6 +248,7 @@ const staticTours: Tour[] = [
       'img/walkingdinner/2.jpg',
       'img/walkingdinner/3.jpg'
     ],
+    faqs: [],
   }
 ];
 

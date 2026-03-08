@@ -1,3 +1,8 @@
+export type TourFaq = {
+  question: string;
+  answer: string;
+};
+
 export type Tour = {
   uuid: string;
   name: string;
@@ -10,4 +15,5 @@ export type Tour = {
   included: string[];
   price: string;
   images: string[];
+  faqs: TourFaq[];
 };
