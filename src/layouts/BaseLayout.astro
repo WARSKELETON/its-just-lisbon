@@ -1,11 +1,11 @@
 ---
 import "../styles/global.css";
-import type { Thing, WithContext } from "schema-dts";
+import type { Thing, WithContext, Graph } from "schema-dts";
 import defaultOgImage from "../images/hero-centered.jpg";
 import logo from "../images/logo.png";
 import { buildOrganizationJsonLd } from "../lib/structuredData/organization";
 
-type StructuredData = WithContext<Thing>;
+type StructuredData = WithContext<Thing> | Graph;
 
 interface Props {
   title?: string;

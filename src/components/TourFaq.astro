@@ -1,0 +1,93 @@
+---
+import type { TourFaq } from "../types/tour";
+
+interface Props {
+  faqs: TourFaq[];
+}
+
+const { faqs } = Astro.props;
+
+if (!faqs || faqs.length === 0) {
+  return null;
+}
+---
+
+<section id="tour-faq" class="relative mx-auto max-w-6xl px-6 pb-20 lg:px-8 lg:pb-28">
+  <!-- Decorative warm glow behind the section -->
+  <div
+    class="pointer-events-none absolute -top-32 left-1/2 h-80 w-[70%] -translate-x-1/2 rounded-full opacity-[0.07]"
+    style="background: radial-gradient(ellipse at center, #f2c16b 0%, transparent 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <header class="relative space-y-3">
+    <p class="text-xs uppercase tracking-[0.4em] text-accent/60">
+      Veelgestelde vragen
+    </p>
+    <h2 class="font-display text-2xl text-bone md:text-3xl lg:text-4xl">
+      Goed om te weten
+    </h2>
+  </header>
+
+  <div class="relative mt-14 space-y-0" role="list">
+    {faqs.map((faq, index) => (
+      <details
+        class="group border-t border-bone/[0.08] transition-colors duration-300 open:border-accent/25"
+        data-tour-faq-item
+        data-tour-faq-question={faq.question}
+        role="listitem"
+        open={index === 0}
+      >
+        <summary class="flex w-full cursor-pointer list-none items-center gap-5 py-6 transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:pl-2 sm:gap-6 sm:py-7 lg:gap-8 lg:py-8 [&::-webkit-details-marker]:hidden">
+          <span class="min-w-[1.75rem] font-display text-xs tracking-[0.12em] text-accent/35 transition-colors duration-300 group-hover:text-accent/80 group-open:text-accent/80" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span class="flex-1 font-display text-[clamp(1rem,2vw,1.25rem)] leading-[1.4] text-bone transition-colors duration-300 group-hover:text-champagne">
+            {faq.question}
+          </span>
+          <span
+            class="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-bone/10 bg-transparent text-bone/40 transition-all duration-[350ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:border-accent/30 group-hover:text-accent/70 group-open:rotate-45 group-open:border-accent/50 group-open:bg-accent/[0.08] group-open:text-accent"
+            aria-hidden="true"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="h-5 w-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </span>
+        </summary>
+        <div class="max-h-0 overflow-hidden opacity-0 transition-all duration-[400ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-open:max-h-[500px] group-open:opacity-100">
+          <p class="max-w-[42rem] pb-7 pl-[3rem] text-[0.9rem] leading-[1.8] text-bone/55 sm:pl-[3.25rem] lg:pb-8 lg:pl-[3.75rem]">
+            {faq.answer}
+          </p>
+        </div>
+      </details>
+    ))}
+    <!-- Bottom border for the last item -->
+    <div class="h-px bg-gradient-to-r from-transparent via-bone/10 to-transparent" aria-hidden="true"></div>
+  </div>
+</section>
+
+<script>
+  const tourFaqItems = document.querySelectorAll("[data-tour-faq-item]");
+
+  tourFaqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      const question =
+        item.getAttribute("data-tour-faq-question") || "unknown";
+      window.phCapture?.("tour_faq_toggle", {
+        question,
+        open: (item as HTMLDetailsElement).open ? "true" : "false",
+      });
+    });
+  });
+</script>

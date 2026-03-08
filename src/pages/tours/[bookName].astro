@@ -5,10 +5,12 @@ import Concierge from "../../components/Concierge.astro";
 import Footer from "../../components/Footer";
 import TourHighlights from "../../components/TourHighlights.astro";
 import TourPhotoGallery from "../../components/TourPhotoGallery.astro";
+import TourFaq from "../../components/TourFaq.astro";
 import { getTours } from "../../data/tours";
 import { buildTourEventJsonLd } from "../../lib/structuredData/tourEvents";
 import { buildTourProductJsonLd } from "../../lib/structuredData/tourProduct";
 import { buildTouristTripJsonLd } from "../../lib/structuredData/touristTrip";
+import { buildFaqJsonLd } from "../../lib/structuredData/faq";
 import type { Tour } from "../../types/tour";
 
 export async function getStaticPaths() {
@@ -73,6 +75,12 @@ const meta = {
 };
 const tourEventJsonLd = buildTourEventJsonLd(tour, { siteUrl: Astro.site });
 const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
+const faqJsonLd = tour.faqs && tour.faqs.length > 0 ? buildFaqJsonLd(tour.faqs) : undefined;
+
+const jsonLdArray: any[] = [tourJsonLd, tourEventJsonLd, tourProductJsonLd];
+if (faqJsonLd) {
+  jsonLdArray.push(faqJsonLd);
+}
 ---
 
 <BaseLayout
@@ -80,7 +88,7 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
   description={meta.description}
   image={heroImage}
   imageAlt={`${tour.name} — Nederlandse gids in ${locationLabel}`}
-  jsonLd={[tourJsonLd, tourEventJsonLd, tourProductJsonLd]}
+  jsonLd={jsonLdArray}
 >
   <Navigation client:load />
   <article class="relative md:pt-10">
@@ -151,11 +159,11 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
               </p>
             </div>
             <div
-              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5"
+              class="flex flex-col gap-4 mt-2 sm:mt-0 sm:flex-row sm:items-center sm:gap-6"
             >
               <a
                 href="#contact"
-                class="inline-flex items-center justify-center rounded-full border border-transparent bg-accent px-7 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-midnight transition hover:bg-champagne"
+                class="inline-flex items-center justify-center rounded-full border border-transparent bg-accent px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.35em] text-midnight transition hover:bg-champagne hover:text-midnight hover:scale-[1.02] active:scale-95"
                 data-ph-event="tour_page_book_click"
                 data-ph-tour={tour.name}
                 data-ph-location={locationLabel}
@@ -164,7 +172,7 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
                 Boek Nu
               </a>
               <p
-                class="inline-flex w-fit items-center rounded-full border border-white/25 bg-black/35 px-4 py-2 text-xs uppercase tracking-[0.35em] text-bone/90"
+                class="text-[0.7rem] uppercase tracking-[0.3em] text-bone/70 drop-shadow-sm"
               >
                 Vanaf {tour.price.replace("\n", " / ")}
               </p>
@@ -237,6 +245,8 @@ const tourProductJsonLd = buildTourProductJsonLd(tour, { siteUrl: Astro.site });
         </aside>
       </div>
     </section>
+
+    <TourFaq faqs={tour.faqs} />
   </article>
   <Concierge selectedTour={tour.name} />
   <Footer />
