@@ -14,106 +14,148 @@ const { tours } = Astro.props as TourShowcaseProps;
 
 const resolvedTours = tours.map((tour) => ({
   ...tour,
-  images: tour.images.map((image) => image + "/m/500x0"),
+  images: tour.images.map((image) => image + "/m/600x0"),
 }));
 ---
 
 <section id="tours" class="relative border-t border-bone/10 py-24">
-  <div class="mx-auto max-w-6xl px-6 lg:px-8">
-    <div
-      class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
-    >
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <!-- Section header -->
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div class="max-w-3xl">
-        <p class="text-xs uppercase tracking-[0.4em] text-bone/40">
-          Wandel keuzes
-        </p>
+        <p class="text-xs uppercase tracking-[0.4em] text-bone/40">Wandel keuzes</p>
         <h2 class="mt-6 font-display text-3xl text-bone md:text-4xl">
           Ervaar de sfeer van Lissabon en Sintra te voet
         </h2>
-        <p class="mt-4 text-sm text-bone/70">
-          Onze selectie van Nederlandstalige wandelingen is met zorg
-          samengesteld voor kleine gezelschappen, waarbij we eeuwenoude
-          straatjes combineren met culinaire lekkernijen en een prachtige
-          natuur.
+        <p class="mt-4 text-sm leading-relaxed text-bone/60">
+          Onze selectie van Nederlandstalige wandelingen is met zorg samengesteld voor kleine
+          gezelschappen, waarbij we eeuwenoude straatjes combineren met culinaire lekkernijen
+          en een prachtige natuur.
         </p>
       </div>
     </div>
-    <div class="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-3">
+
+    <!-- Tour cards grid -->
+    <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
-        resolvedTours.map((tour) => (
-          <article class="group relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-bone/10 bg-slate/30 transition hover:border-accent/60 hover:shadow-glow">
+        resolvedTours.map((tour, index) => (
+          <article
+            class="group relative isolate aspect-[3/4] cursor-pointer overflow-hidden rounded-3xl border border-bone/[.08] transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/35 hover:shadow-glow max-sm:aspect-[4/5] will-change-transform"
+            data-tour-card
+          >
+            {/* Image link — covers entire card at z-1; content at z-2 with pointer-events:none
+                so clicks fall through to here by default */}
             <a
               href={`/tours/${tour.slug}`}
-              class="absolute inset-0 z-10 rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
-              aria-label={`Bekijk details over ${tour.name}`}
+              class="absolute inset-0 z-[1] block overflow-hidden rounded-3xl"
+              tabindex="-1"
+              aria-label={`Bekijk foto's en details van ${tour.name}`}
               data-ph-event="tour_card_open"
               data-ph-tour={tour.name}
               data-ph-location={locationLabels[tour.location]}
               data-ph-source="card"
             >
-              <span class="sr-only">Bekijk details</span>
+              {tour.images.map((img, imgIndex) => (
+                <img
+                  src={img}
+                  alt={
+                    imgIndex === 0
+                      ? `${tour.name} — ${locationLabels[tour.location]}`
+                      : ""
+                  }
+                  loading={index < 3 ? "eager" : "lazy"}
+                  decoding="async"
+                  class:list={[
+                    "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
+                    imgIndex === 0 ? "opacity-100" : "opacity-0",
+                  ]}
+                  data-image-index={imgIndex}
+                />
+              ))}
+
+              {/* Gradient overlay */}
+              <div class="tour-gradient absolute inset-0 z-[1] bg-[linear-gradient(to_top,rgba(4,4,4,0.92)_0%,rgba(4,4,4,0.7)_30%,rgba(4,4,4,0.15)_55%,transparent_75%)]" />
             </a>
-            <div class="relative">
-              <img
-                src={tour.images[0]}
-                alt={`${tour.name} — ${locationLabels[tour.location]}`}
-                loading="lazy"
-                class="h-64 w-full object-cover"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-              <div class="absolute bottom-6 left-6 flex flex-col gap-2">
-                <span class="inline-flex w-fit items-center rounded-full border border-white/25 bg-black/40 px-3 py-1 text-[0.65rem] uppercase tracking-[0.35em] text-bone/70 backdrop-blur">
+
+            {/* Content overlay — pointer-events:none; interactive children opt back in */}
+            <div class="pointer-events-none relative z-[2] flex h-full flex-col justify-between p-6">
+              {/* Top: location badge */}
+              <div>
+                <span class="inline-flex items-center rounded-full border border-white/15 bg-black/50 px-3.5 py-1.5 text-[0.625rem] font-medium uppercase tracking-[0.35em] text-bone/70 backdrop-blur-md">
                   {locationLabels[tour.location]}
                 </span>
-                <h3 class="font-display text-2xl text-bone md:text-3xl">
+              </div>
+
+              {/* Bottom: title, description, dots, footer */}
+              <div class="flex flex-col gap-3">
+                <h3 class="font-display text-[1.625rem] leading-[1.15] text-bone transition-colors duration-300 group-hover:text-champagne lg:text-[1.875rem]">
                   {tour.name}
                 </h3>
-              </div>
-            </div>
-            <div class="flex flex-1 flex-col gap-6 px-8 py-8">
-              <header class="space-y-4">
-                <div class="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.28em] text-bone/50">
-                  <span class="rounded-full border border-bone/20 px-4 py-1">
-                    {tour.included.length} inclusief
-                  </span>
+
+                {/* Description + expand toggle */}
+                <div class="flex flex-col gap-1.5" data-desc-wrap>
+                  <p
+                    class="line-clamp-2 text-[0.8125rem] leading-relaxed text-bone/50 transition-colors duration-300 group-hover:text-bone/65"
+                    data-desc
+                  >
+                    {tour.description}
+                  </p>
+                  <button
+                    class="pointer-events-auto self-start text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-accent/75 transition-colors duration-200 hover:text-accent"
+                    data-expand-btn
+                    aria-expanded="false"
+                    type="button"
+                  >
+                    Lees meer
+                  </button>
                 </div>
-              </header>
-              <ul class="space-y-3 text-sm text-bone/70">
-                {tour.included.map((item) => (
-                  <li class="flex items-start gap-3">
-                    <span class="mt-1.5 inline-flex size-1.5 rounded-full bg-accent/80" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <div class="relative z-20 mt-auto flex flex-col gap-4 border-t border-bone/10 pt-6 text-sm">
-                <span class="whitespace-pre-line font-semibold text-bone">
-                  {tour.price}
-                </span>
-                <div class="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.3em]">
-                  <a
-                    href={`/tours/${tour.slug}`}
-                    class="text-bone/60 transition hover:text-champagne"
-                    data-ph-event="tour_detail_click"
-                    data-ph-tour={tour.name}
-                    data-ph-location={locationLabels[tour.location]}
-                    data-ph-source="link"
-                  >
-                    Bekijk details
-                  </a>
-                  <a
-                    href={`/?tour=${encodeURIComponent(tour.name)}#contact`}
-                    class="text-accent transition hover:text-champagne"
-                    data-tour-link
-                    data-tour={tour.name}
-                    data-ph-event="tour_book_click"
-                    data-ph-tour={tour.name}
-                    data-ph-location={locationLabels[tour.location]}
-                    data-ph-availability={tour.toBook ? "bookable" : "inquire"}
-                    data-ph-source="showcase"
-                  >
-                    {tour.toBook ? "Boek nu" : "Informeer naar opties"}
-                  </a>
+
+                {/* Image cycling dots */}
+                <div
+                  class="pointer-events-none flex items-center justify-center gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  aria-hidden="true"
+                  data-dots
+                >
+                  {tour.images.map((_, imgIndex) => (
+                    <span
+                      class:list={[
+                        "h-1.5 rounded-full transition-all duration-300",
+                        imgIndex === 0 ? "w-4 bg-accent" : "w-1.5 bg-bone/25",
+                      ]}
+                    />
+                  ))}
+                </div>
+
+                {/* Footer: price + CTAs */}
+                <div class="flex items-center justify-between gap-4 border-t border-bone/[.08] pt-3">
+                  <span class="flex-shrink-0 whitespace-pre-line text-[0.9375rem] font-semibold leading-[1.4] text-bone">
+                    {tour.price}
+                  </span>
+                  <div class="pointer-events-auto flex flex-shrink-0 items-center gap-3">
+                    <a
+                      href={`/tours/${tour.slug}`}
+                      class="hidden whitespace-nowrap rounded-full border border-bone/[.12] px-3.5 py-2 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-bone/55 transition duration-300 hover:border-bone/30 hover:bg-bone/[.06] hover:text-bone sm:inline-flex"
+                      data-ph-event="tour_detail_click"
+                      data-ph-tour={tour.name}
+                      data-ph-location={locationLabels[tour.location]}
+                      data-ph-source="link"
+                    >
+                      Bekijk details
+                    </a>
+                    <a
+                      href={`/?tour=${encodeURIComponent(tour.name)}#contact`}
+                      class="whitespace-nowrap rounded-full bg-accent px-3.5 py-2 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-midnight transition duration-300 hover:bg-champagne"
+                      data-tour-link
+                      data-tour={tour.name}
+                      data-ph-event="tour_book_click"
+                      data-ph-tour={tour.name}
+                      data-ph-location={locationLabels[tour.location]}
+                      data-ph-availability={tour.toBook ? "bookable" : "inquire"}
+                      data-ph-source="showcase"
+                    >
+                      {tour.toBook ? "Boek nu" : "Informeer"}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -124,37 +166,139 @@ const resolvedTours = tours.map((tour) => ({
   </div>
 </section>
 
+<style>
+  /* ── Only what Tailwind cannot express ─────────────── */
+
+  /* Override line-clamp when description is expanded */
+  [data-desc].is-expanded {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
+
+  /* Darken gradient when card is in reading mode */
+  [data-tour-card].is-reading .tour-gradient {
+    background: linear-gradient(
+      to top,
+      rgba(4, 4, 4, 0.98) 0%,
+      rgba(4, 4, 4, 0.93) 40%,
+      rgba(4, 4, 4, 0.75) 70%,
+      rgba(4, 4, 4, 0.4) 100%
+    );
+  }
+</style>
+
 <script>
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
 
+  // ── Image hover cycling ──────────────────────────────
+
+  if (!prefersReducedMotion) {
+    document
+      .querySelectorAll<HTMLElement>("[data-tour-card]")
+      .forEach((card) => {
+        const images =
+          card.querySelectorAll<HTMLImageElement>("[data-image-index]");
+        const dots = card.querySelectorAll<HTMLElement>("[data-dots] span");
+        if (images.length <= 1) return;
+
+        let currentIndex = 0;
+        let intervalId: ReturnType<typeof setInterval> | null = null;
+
+        const showImage = (index: number) => {
+          images.forEach((img, i) => {
+            img.classList.toggle("opacity-100", i === index);
+            img.classList.toggle("opacity-0", i !== index);
+          });
+          dots.forEach((dot, i) => {
+            if (i === index) {
+              dot.classList.add("w-4", "bg-accent");
+              dot.classList.remove("w-1.5", "bg-bone/25");
+            } else {
+              dot.classList.remove("w-4", "bg-accent");
+              dot.classList.add("w-1.5", "bg-bone/25");
+            }
+          });
+          currentIndex = index;
+        };
+
+        const startCycling = () => {
+          if (intervalId) return;
+          intervalId = setInterval(() => {
+            showImage((currentIndex + 1) % images.length);
+          }, 2400);
+        };
+
+        const stopCycling = () => {
+          if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
+          showImage(0);
+        };
+
+        card.addEventListener("mouseenter", startCycling);
+        card.addEventListener("mouseleave", stopCycling);
+        card.addEventListener("focusin", startCycling);
+        card.addEventListener("focusout", (e) => {
+          if (!card.contains((e as FocusEvent).relatedTarget as Node)) {
+            stopCycling();
+          }
+        });
+      });
+  }
+
+  // ── Description expand/collapse ──────────────────────
+
+  document.querySelectorAll<HTMLElement>("[data-tour-card]").forEach((card) => {
+    const desc = card.querySelector<HTMLElement>("[data-desc]");
+    const btn = card.querySelector<HTMLButtonElement>("[data-expand-btn]");
+    if (!desc || !btn) return;
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      if (expanded) {
+        desc.classList.remove("is-expanded");
+        btn.setAttribute("aria-expanded", "false");
+        btn.textContent = "Lees meer";
+        card.classList.remove("is-reading");
+      } else {
+        desc.classList.add("is-expanded");
+        btn.setAttribute("aria-expanded", "true");
+        btn.textContent = "Lees minder";
+        card.classList.add("is-reading");
+      }
+    });
+  });
+
+  // ── Tour link scroll behavior ────────────────────────
+
   document.querySelectorAll("[data-tour-link]").forEach((link) => {
     link.addEventListener("click", (event) => {
-      if (event.defaultPrevented) {
-        return;
-      }
+      if (event.defaultPrevented) return;
 
       const isModifiedClick =
-        event.button !== 0 ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey;
+        (event as MouseEvent).button !== 0 ||
+        (event as KeyboardEvent).metaKey ||
+        (event as KeyboardEvent).ctrlKey ||
+        (event as KeyboardEvent).shiftKey ||
+        (event as KeyboardEvent).altKey;
 
-      if (isModifiedClick) {
-        return;
-      }
+      if (isModifiedClick) return;
 
       const contactSection = document.getElementById("contact");
-      if (!contactSection) {
-        return;
-      }
+      if (!contactSection) return;
 
       event.preventDefault();
 
-      const tourName = link.getAttribute("data-tour");
-      const tourSelect = document.getElementById("tour");
+      const tourName = (link as HTMLElement).getAttribute("data-tour");
+      const tourSelect = document.getElementById(
+        "tour",
+      ) as HTMLSelectElement | null;
       if (tourName && tourSelect && "value" in tourSelect) {
         tourSelect.value = tourName;
       }
