@@ -112,7 +112,7 @@ const resolvedTours = tours.map((tour) => ({
 
                 {/* Image cycling dots */}
                 <div
-                  class="pointer-events-none flex items-center justify-center gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  class="pointer-events-none flex items-center justify-center gap-1.5 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100"
                   aria-hidden="true"
                   data-dots
                 >
@@ -249,6 +249,60 @@ const resolvedTours = tours.map((tour) => ({
         });
       });
   }
+
+  // ── Touch swipe to cycle images (mobile) ─────────────
+
+  document
+    .querySelectorAll<HTMLElement>("[data-tour-card]")
+    .forEach((card) => {
+      const images =
+        card.querySelectorAll<HTMLImageElement>("[data-image-index]");
+      const dots = card.querySelectorAll<HTMLElement>("[data-dots] span");
+      if (images.length <= 1) return;
+
+      let currentIndex = 0;
+
+      const showImageTouch = (index: number) => {
+        images.forEach((img, i) => {
+          img.classList.toggle("opacity-100", i === index);
+          img.classList.toggle("opacity-0", i !== index);
+        });
+        dots.forEach((dot, i) => {
+          if (i === index) {
+            dot.classList.add("w-4", "bg-accent");
+            dot.classList.remove("w-1.5", "bg-bone/25");
+          } else {
+            dot.classList.remove("w-4", "bg-accent");
+            dot.classList.add("w-1.5", "bg-bone/25");
+          }
+        });
+        currentIndex = index;
+      };
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      card.addEventListener("touchstart", (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      card.addEventListener("touchend", (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+
+        // Only treat as swipe if horizontal movement > 40px and more horizontal than vertical
+        if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
+
+        e.preventDefault(); // prevent tap-to-navigate after a swipe
+
+        const next =
+          dx < 0
+            ? (currentIndex + 1) % images.length
+            : (currentIndex - 1 + images.length) % images.length;
+        showImageTouch(next);
+      });
+    });
 
   // ── Description expand/collapse ──────────────────────
 
