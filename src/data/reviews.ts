@@ -26,13 +26,26 @@ const formatPublishedAt = (value: unknown): string => {
   }).format(parsed);
 };
 
+const toStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => readString(item))
+      .filter((item) => item.length > 0);
+  }
+
+  const asString = readString(value);
+  return asString ? [asString] : [];
+};
+
 const normalizeStory = (story: StoryblokStory, index: number): Review => {
   const content = (story.content ?? {}) as Record<string, unknown>;
   const name = readString(readField(content, ['name'])) || readString(story.name) || `Review ${index + 1}`;
   const reviewContent = readString(readField(content, ['content']));
   const avatar = readAsset(readField(content, ['avatar']));
   const publishedAt = formatPublishedAt(readField(content, ['published_at', 'publishedAt', 'date']));
-  const tour = readString(readField(content, ['tour']));
+  const tourField = readField(content, ['tour', 'tours']);
+  const tourIds = toStringArray(tourField);
+  const tour = readString(tourField);
   const uuid = readString(story.uuid) || `review-${index + 1}`;
 
   return {
@@ -41,6 +54,7 @@ const normalizeStory = (story: StoryblokStory, index: number): Review => {
     content: reviewContent,
     avatar,
     publishedAt,
+    tourIds,
     tour,
   };
 };

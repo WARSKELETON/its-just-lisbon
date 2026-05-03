@@ -35,7 +35,7 @@ const tourListJsonLd = buildTourListJsonLd(tours, { siteUrl: Astro.site });
   <Hero />
   <!-- <SignatureHighlights /> -->
   <TourShowcase tours={tours} />
-  <Testimonials reviews={reviews} client:visible />
+  <Testimonials reviews={reviews} tours={tours} client:visible />
   <Faq faqs={faqs} />
   <AboutRenate />
   <Concierge />
