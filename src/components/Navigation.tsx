@@ -1,5 +1,4 @@
 import { useState, type FC } from 'react';
-import logo from '../images/logo.png';
 
 interface NavigationProps {
   variant?: 'default' | 'hero';

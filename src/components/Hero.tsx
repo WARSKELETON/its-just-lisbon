@@ -12,7 +12,6 @@ const Hero: FC = () => {
         aria-hidden="true"
         className="absolute inset-0 -z-10 h-full w-full object-cover"
         loading="eager"
-        fetchPriority="high"
         decoding="async"
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />

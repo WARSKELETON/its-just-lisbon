@@ -77,7 +77,7 @@ const { faqs } = Astro.props as { faqs: Faq[] };
 </section>
 
 <script>
-  const faqItems = document.querySelectorAll("[data-faq-item]");
+  const faqItems = document.querySelectorAll<HTMLDetailsElement>("[data-faq-item]");
 
   faqItems.forEach((item) => {
     item.addEventListener("toggle", () => {

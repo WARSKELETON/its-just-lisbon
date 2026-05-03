@@ -414,7 +414,7 @@ const countries = countryCodes
       </div>
     </form>
     <script>
-      const landcodeSelect = document.getElementById("landcode");
+      const landcodeSelect = document.getElementById("landcode") as HTMLSelectElement | null;
       const landcodePrefix = document.getElementById("landcode-prefix");
 
       if (landcodeSelect && landcodePrefix) {
